@@ -71,4 +71,6 @@ void renderGame(GameState* game)
     ImGui::End();
 }
 
-void lateRender(GameState* game);
+void lateRender(GameState* game)
+{
+}
