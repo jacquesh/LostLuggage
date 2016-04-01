@@ -57,12 +57,15 @@ void initGame(GameState* game)
     int bagCount;
     int bagX;
     int bagY;
+    char bagCategory;
     fin >> bagCount;
     for(int i=0; i<bagCount; ++i)
     {
         fin >> bagX;
         fin >> bagY;
+        fin >> bagCategory;
         Bag* bag = new Bag(Vector2(bagX, bagY), Vector2(GRID_SIZE, GRID_SIZE), game->currentLevel);
+        bag->category = bagCategory - 'A';
         game->bagList.insert(bag);
     }
     fin.close();

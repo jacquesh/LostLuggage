@@ -4,6 +4,7 @@
 Conveyer::Conveyer(Direction _dir)
   : dir(_dir)
 {
+    type = MapObjectType::conveyer;
 }
 
 Vector2I Conveyer::getSpeed()
@@ -23,13 +24,19 @@ Vector2I Conveyer::getSpeed()
   }
 }
 
+Bin::Bin(int _cat)
+    :  category(_cat)
+{
+    type = MapObjectType::bin;
+}
+
 Level::Level(int _width, int _height)
   : width(_width) , height(_height)
 {
-  map = new Conveyer** [height];
+  map = new MapObject** [height];
   for (int i = 0; i<height; i++)
   {
-    map[i] = new Conveyer* [width];
+    map[i] = new MapObject* [width];
     for (int j = 0; j<width; j++)
       map[i][j] = nullptr;
   }
@@ -38,15 +45,20 @@ Level::Level(int _width, int _height)
 Level::Level(std::fstream& fin)
 {
   fin>>height>>width;
-  map = new Conveyer** [height];
+  map = new MapObject** [height];
   for (int i = height-1; i>=0; i--)
   {
-    map[i] = new Conveyer* [width];
+    map[i] = new MapObject* [width];
     for (int j = 0; j<width; j++)
     {
       map[i][j] = nullptr;
       char v;
       fin>>v;
+      if((v >= 'A') && (v <= 'Z'))
+      {
+        int binCategory = v - 'A';
+        map[i][j] = new Bin(binCategory);
+      }
       switch (v)
       {
         case '.':
