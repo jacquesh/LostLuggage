@@ -15,12 +15,6 @@ GLuint pixelTexture;
 GLuint towerTexture;
 GLuint enemyTexture;
 
-GLuint roadTex_deadend;
-GLuint roadTex_straight;
-GLuint roadTex_turn;
-GLuint roadTex_tjunction;
-GLuint roadTex_crossroads;
-
 // TODO: Dump everything in a texture atlas
 void loadRenderData()
 {
@@ -36,12 +30,6 @@ void loadRenderData()
     dge_allocateAndLoadTexture("resources/tower.png", &towerTexture);
     dge_allocateAndLoadTexture("resources/pixel.png", &pixelTexture);
     dge_allocateAndLoadTexture("resources/enemy.png", &enemyTexture);
-
-    dge_allocateAndLoadTexture("resources/road_deadend.png", &roadTex_deadend);
-    dge_allocateAndLoadTexture("resources/road_vertical.png", &roadTex_straight);
-    dge_allocateAndLoadTexture("resources/road_corner.png", &roadTex_turn);
-    dge_allocateAndLoadTexture("resources/road_tjunction.png", &roadTex_tjunction);
-    dge_allocateAndLoadTexture("resources/road_crossroads.png", &roadTex_crossroads);
 }
 
 void renderGame(GameState* game)
@@ -81,7 +69,7 @@ void renderGame(GameState* game)
         dge_renderQuad(game->camera, position, bag.size, 0.0f, red);
     }
 
-    ImVec2 windowLoc(50.0f, 50.0f);
+/*    ImVec2 windowLoc(50.0f, 50.0f);
     ImVec2 windowSize(200.0f, 200.f);
     int UIFlags = ImGuiWindowFlags_NoMove |
                   ImGuiWindowFlags_NoResize |
@@ -97,6 +85,7 @@ void renderGame(GameState* game)
     }
 
     ImGui::End();
+    */
 }
 
 void lateRender(GameState* game)

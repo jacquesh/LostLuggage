@@ -80,7 +80,7 @@ void cleanupGame(GameState* game);
     // TODO: SDL_ShowCursor(0) doesn't appear to work, so we have this workaround for now
     const uint8 zero = 0;
     SDL_Cursor* cursor = SDL_CreateCursor(&zero, &zero, 1,1, 0,0);
-    SDL_SetCursor(cursor);
+//    SDL_SetCursor(cursor);
 
     int maxControllerIndex = SDL_NumJoysticks();
     debug("We can have at most %d controllers", maxControllerIndex);

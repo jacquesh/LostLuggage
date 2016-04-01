@@ -72,6 +72,9 @@ bool updateGame(GameState* game, float deltaTime)
 {
     bool keepRunning = handleInput(game);;
 
+    for (int i = 0; i< game->bagList.size(); ++i)
+        game->bagList[i]->updatePosition(deltaTime);
+
     return keepRunning;
 }
 
