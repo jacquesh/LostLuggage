@@ -1,4 +1,5 @@
 #include "level.h"
+#include <fstream>
 
 Conveyer::Conveyer(Direction _dir)
   : dir(_dir)
@@ -13,8 +14,45 @@ Level::Level(int _width, int _height)
   {
     map[i] = new Conveyer* [width];
     for (int j = 0; j<width; j++)
-      map[i][j] = nullptr; 
+      map[i][j] = nullptr;
   }
+}
+
+Level::Level(char* filename)
+{
+  std::fstream fin (filename, std::fstream::in);
+  fin>>height>>width;
+  map = new Conveyer** [height];
+  for (int i = 0; i<height; i++)
+  {
+    map[i] = new Conveyer* [width];
+    for (int j = 0; j<width; j++)
+    {
+      map[i][j] = nullptr;
+      char v;
+      fin>>v;
+      switch (v)
+      {
+        case '.':
+          break;
+        case '^':
+          map[i][j] = new Conveyer(up);
+          break;
+        case '>':
+          map[i][j] = new Conveyer(right);
+          break;
+        case '<':
+          map[i][j] = new Conveyer(left);
+          break;
+        case 'v':
+          map[i][j] = new Conveyer(down);
+          break;
+        default:
+          break;
+      }
+    }
+  }
+  fin.close();
 }
 
 Level::~Level()
@@ -24,7 +62,7 @@ Level::~Level()
     for (int j = 0; j<width; j++)
       if (map[i][j] != nullptr)
         delete map[i][j];
-    delete[] map[i]; 
+    delete[] map[i];
   }
 }
 
