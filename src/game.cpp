@@ -26,23 +26,29 @@ bool handleInput(GameState* game)
     while (SDL_PollEvent(&e))
     {
         ImGui_ImplSdlGL3_ProcessEvent(&e);
-
-        if (e.type == SDL_QUIT)
+        switch (e.type)
         {
-            keepRunning = false;
-        }
-        else if(e.type == SDL_KEYDOWN)
-        {
-            if(e.key.repeat)
+            case SDL_QUIT:
             {
-                continue;
-            }
-            switch(e.key.keysym.sym)
-            {
-            case SDLK_ESCAPE:
                 keepRunning = false;
-                break;
-            }
+            } break;
+            case SDL_KEYDOWN:
+            {
+                if(e.key.repeat)
+                {
+                    continue;
+                }
+                switch (e.key.keysym.sym)
+                {
+                    case SDLK_ESCAPE:
+                        keepRunning = false;
+                        break;
+                }
+            } break;
+            case  SDL_MOUSEBUTTONDOWN:
+            {
+                game->currentLevel->flipConveyers(int(e.motion.x/grid_size)-1,int((480-e.motion.y)/grid_size)-1);
+            } break;
         }
     }
     return keepRunning;
@@ -71,6 +77,7 @@ void initGame(GameState* game)
         game->bagList.insert(bag);
     }
     fin.close();
+    game->currentLevel->flipConveyers(4,2);
 }
 
 bool updateGame(GameState* game, float deltaTime)
