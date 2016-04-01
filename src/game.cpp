@@ -79,7 +79,6 @@ void loadLevel(GameState* game, const char* filename)
 
     grid_size = std::min(grid_size, 640.f / (game->currentLevel->width + 1));
     grid_size = std::min(grid_size, 480.f / (game->currentLevel->height + 1));
-    int bagCount;
     int bagX;
     int bagY;
     char bagCategory;
@@ -92,8 +91,7 @@ void loadLevel(GameState* game, const char* filename)
         bagX = round((*it).get<picojson::array>()[0].get<double>());
         bagY = round((*it).get<picojson::array>()[1].get<double>());
         bagCategory = (*it).get<picojson::array>()[2].to_str()[0];
-        Bag* bag = new Bag(Vector2(bagX, bagY), bagSize, game->currentLevel);
-        bag->category = bagCategory - 'A';
+        Bag* bag = new Bag(Vector2(bagX, bagY), bagSize, bagCategory - 'A', game->currentLevel);
         game->bagList.insert(bag);
     }
     fin.close();

@@ -14,7 +14,7 @@ struct Bag
   Vector2I lastPosition;
   Vector2I nextPosition;
   Vector2 velocity;
-  Bag(Vector2 _position, Vector2 _size, Level* _level);
+  Bag(Vector2 _position, Vector2 _size, int _category, Level* _level);
   void updatePosition(float timestep);
 };
 
