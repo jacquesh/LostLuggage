@@ -6,20 +6,20 @@ Conveyer::Conveyer(Direction _dir)
 {
 }
 
-Vector2 Conveyer::getSpeed()
+Vector2I Conveyer::getSpeed()
 {
   switch(dir)
   {
     case up:
-      return Vector2(0,1);
+      return Vector2I(0,1);
     case down:
-      return Vector2(0,-1);
+      return Vector2I(0,-1);
     case left:
-      return Vector2(-1,0);
+      return Vector2I(-1,0);
     case right:
-      return Vector2(1,0);
+      return Vector2I(1,0);
     default:
-      return Vector2(0,0);
+      return Vector2I(0,0);
   }
 }
 
@@ -81,14 +81,4 @@ Level::~Level()
         delete map[i][j];
     delete[] map[i];
   }
-}
-
-Vector2 Level::getVelocity(Vector2 topLeft, Vector2 bottomRight)
-{
-  Vector2 ans = Vector2(0,0);
-  for (int x = int(topLeft.x+0.5); x <= int(bottomRight.x+0.5-0.0001); ++x)
-    for (int y = int(topLeft.y+0.5); y >= int(bottomRight.y+0.5-0.0001); --y)
-      if (map[y][x] != nullptr)
-          ans += map[y][x]->getSpeed();
-  return ans.normalized();
 }
