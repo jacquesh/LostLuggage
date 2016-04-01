@@ -6,3 +6,5 @@ resources/
 # Vim Metafiles
 *.swp
 
+imgui.ini
+
