@@ -1,7 +1,9 @@
+#define NOMINMAX
 #include <SDL.h>
 
 #include <stdio.h>
 #include <fstream>
+#include <algorithm>
 
 #include "imgui.h"
 #include "imgui_impl_sdl_gl3.h"
@@ -16,6 +18,8 @@
 
 #include "render.h"
 
+float grid_size = 64.f;
+
 bool handleInput(GameState* game)
 {
     bool keepRunning = true;
@@ -23,23 +27,29 @@ bool handleInput(GameState* game)
     while (SDL_PollEvent(&e))
     {
         ImGui_ImplSdlGL3_ProcessEvent(&e);
-
-        if (e.type == SDL_QUIT)
+        switch (e.type)
         {
-            keepRunning = false;
-        }
-        else if(e.type == SDL_KEYDOWN)
-        {
-            if(e.key.repeat)
+            case SDL_QUIT:
             {
-                continue;
-            }
-            switch(e.key.keysym.sym)
-            {
-            case SDLK_ESCAPE:
                 keepRunning = false;
-                break;
-            }
+            } break;
+            case SDL_KEYDOWN:
+            {
+                if(e.key.repeat)
+                {
+                    continue;
+                }
+                switch (e.key.keysym.sym)
+                {
+                    case SDLK_ESCAPE:
+                        keepRunning = false;
+                        break;
+                }
+            } break;
+            case  SDL_MOUSEBUTTONDOWN:
+            {
+                game->currentLevel->flipConveyers(int(e.motion.x/grid_size)-1,int((480-e.motion.y)/grid_size)-1);
+            } break;
         }
     }
     return keepRunning;
@@ -55,28 +65,32 @@ void loadLevel(GameState* game, const char* filename)
 
     std::fstream fin(filename, std::fstream::in);
     game->currentLevel = new Level(fin);
+    grid_size = std::min(grid_size, 640.f / (game->currentLevel->width + 1));
+    grid_size = std::min(grid_size, 480.f / (game->currentLevel->height + 1));
     int bagCount;
     int bagX;
     int bagY;
     char bagCategory;
     fin >> bagCount;
+    Vector2 bagSize(grid_size*0.5f, grid_size*0.5f);
     for(int i=0; i<bagCount; ++i)
     {
         fin >> bagX;
         fin >> bagY;
         fin >> bagCategory;
-        Bag* bag = new Bag(Vector2(bagX, bagY), Vector2(GRID_SIZE, GRID_SIZE), game->currentLevel);
+        Bag* bag = new Bag(Vector2(bagX, bagY), bagSize, game->currentLevel);
         bag->category = bagCategory - 'A';
         game->bagList.insert(bag);
     }
     fin.close();
+    game->currentLevel->flipConveyers(4,2);
 }
 
 void initGame(GameState* game)
 {
     loadRenderData();
 
-    game->camera.position = Vector2(-GRID_SIZE, -GRID_SIZE);
+    game->camera.position = Vector2(-grid_size, -grid_size);
     game->camera.size = Vector2(640.0f, 480.f);
 
     loadLevel(game, "resources/test.lvl");

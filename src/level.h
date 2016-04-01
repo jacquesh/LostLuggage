@@ -7,9 +7,9 @@
 
 enum Direction
 {
+  up,
   left,
   right,
-  up,
   down
 };
 
@@ -41,11 +41,13 @@ struct Level
 {
   int width;
   int height;
+  int **conveyerParent;
   MapObject ***map;
   Level(int _width, int _height);
   Level(std::fstream& fin);
   ~Level();
   Vector2 getVelocity(Vector2 topLeft, Vector2 bottomRight);
+  void flipConveyers(int x,int y);
 };
 
 #endif
