@@ -1,5 +1,7 @@
 #include "level.h"
-#include <fstream>
+#include <sstream>
+#include <picojson.h>
+#include <math.h>
 
 int twodfind(int** parents, int a, int b, int width)
 {
@@ -47,13 +49,17 @@ Level::Level(int _width, int _height)
   }
 }
 
-Level::Level(std::fstream& fin)
+Level::Level(picojson::value v)
 {
-  fin>>height>>width;
+    height = round(v.get("size").get<picojson::array>()[0].get<double>());
+    width  = round(v.get("size").get<picojson::array>()[1].get<double>());
   map = new Conveyer** [height];
   conveyerParent = new int* [height];
+
+
   for (int i = height-1; i>=0; i--)
   {
+    std::stringstream sin(v.get("map").get<picojson::array>()[height-i-1].to_str());
     map[i] = new Conveyer* [width];
     conveyerParent[i] = new int [width];
     for (int j = 0; j<width; j++)
@@ -61,7 +67,7 @@ Level::Level(std::fstream& fin)
       map[i][j] = nullptr;
       conveyerParent[i][j] = i * width + j;
       char v;
-      fin>>v;
+      sin>>v;
       switch (v)
       {
         case '.':

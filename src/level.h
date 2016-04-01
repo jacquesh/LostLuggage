@@ -3,7 +3,10 @@
 
 #include <fstream>
 
+#include <picojson.h>
+
 #include "dge_math.h"
+
 
 enum Direction
 {
@@ -27,7 +30,7 @@ struct Level
   int **conveyerParent;
   Conveyer ***map;
   Level(int _width, int _height);
-  Level(std::fstream& fin);
+  Level(picojson::value v);
   ~Level();
   Vector2 getVelocity(Vector2 topLeft, Vector2 bottomRight);
   void flipConveyers(int x,int y);

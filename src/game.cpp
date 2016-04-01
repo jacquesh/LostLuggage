@@ -4,6 +4,8 @@
 #include <fstream>
 #include <algorithm>
 
+#include <picojson.h>
+
 #include "imgui.h"
 #include "imgui_impl_sdl_gl3.h"
 
@@ -61,23 +63,31 @@ void initGame(GameState* game)
     game->camera.position = Vector2(-grid_size, -grid_size);
     game->camera.size = Vector2(640.0f, 480.f);
 
-    std::fstream fin("resources/level0.lvl", std::fstream::in);
-    game->currentLevel = new Level(fin);
+    std::fstream fin("resources/level0.json", std::fstream::in);
+    picojson::value v;
+    std::string err;
+    std::istream_iterator<char> input(fin);
+    input = picojson::parse(v,input, std::istream_iterator<char>(),&err);
+    if (! err.empty()) debug("%s",err.c_str());
+
+    game->currentLevel = new Level(v);
+
     grid_size = std::min(grid_size, 640.f / (game->currentLevel->width + 1));
     grid_size = std::min(grid_size, 480.f / (game->currentLevel->height + 1));
     int bagCount;
     int bagX;
     int bagY;
-    fin >> bagCount;
-    for(int i=0; i<bagCount; ++i)
+    picojson::array luggage = v.get("luggage").get<picojson::array>();
+    for(picojson::array::iterator it = luggage.begin();
+                                  it != luggage.end();
+                                  ++it)
     {
-        fin >> bagX;
-        fin >> bagY;
+        bagX = round((*it).get<picojson::array>()[0].get<double>());
+        bagY = round((*it).get<picojson::array>()[1].get<double>());
         Bag* bag = new Bag(Vector2(bagX, bagY), Vector2(grid_size*0.5, grid_size*0.5), game->currentLevel);
         game->bagList.insert(bag);
     }
     fin.close();
-    game->currentLevel->flipConveyers(4,2);
 }
 
 bool updateGame(GameState* game, float deltaTime)
