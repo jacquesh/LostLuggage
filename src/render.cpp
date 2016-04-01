@@ -54,10 +54,21 @@ void renderGame(GameState* game)
     {
         for(int x=0; x<game->currentLevel->width; ++x)
         {
-            if(game->currentLevel->map[y][x])
+            Conveyer* conv = game->currentLevel->map[y][x];
+            if(conv)
             {
                 Vector2 cellCentre(x*GRID_SIZE, y*GRID_SIZE);
                 dge_renderQuad(game->camera, cellCentre, cellSize, 0.0f, white);
+                char* dirChar = "";
+                switch(conv->dir)
+                {
+                    case Direction::left: dirChar = "<"; break;
+                    case Direction::right: dirChar = ">"; break;
+                    case Direction::up: dirChar = "^"; break;
+                    case Direction::down: dirChar = "v"; break;
+                    default: dirChar = "x";
+                }
+                dge_renderString(game->camera, dirChar, 1, cellCentre, GRID_SIZE/2.0f, white);
             }
         }
     }
