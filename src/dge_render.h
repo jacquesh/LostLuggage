@@ -73,6 +73,7 @@ void dge_updateShaderCameraState(CameraState camera, GLuint shader);
 
 void dge_drawLine2D(CameraState camera, Vector2 fromLoc, Vector2 toLoc, Vector4 color);
 void dge_renderString(CameraState camera, const char* string, int length, Vector2 position, float size, Vector4 color);
+void dge_renderQuad(CameraState camera, Vector2 centre, Vector2 size, float rotation, Vector4 color);
 void dge_renderSprite(CameraState camera, GLuint textureID, Vector2 position, float rotation, Vector2 size, Vector4 color);
 void dge_renderSprite(CameraState camera, GLuint textureID, Vector2 position, float rotation, Vector2 size);
 

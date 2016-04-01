@@ -25,6 +25,7 @@ GLuint lineLocBuffer;
 
 GLuint spriteVAO;
 GLuint spriteShader;
+GLuint flatColorShader;
 GLuint indexBuffer;
 GLuint vertexLocBuffer;
 GLuint texCoordBuffer;
@@ -263,8 +264,14 @@ void dge_loadDefaultShaders()
     glGenVertexArrays(1, &spriteVAO);
     spriteShader = dge_loadShaderProgram("resources/sprite.vsh",
                                          "resources/sprite.fsh");
-    GLint positionLoc = glGetAttribLocation(spriteShader, "position");
-    GLint texCoordLoc = glGetAttribLocation(spriteShader, "texCoord");
+    GLint spritePositionLoc = glGetAttribLocation(spriteShader, "position");
+    GLint spriteTexCoordLoc = glGetAttribLocation(spriteShader, "texCoord");
+
+    // Flat Color Shader
+    flatColorShader = dge_loadShaderProgram("resources/flatColor.vsh",
+                                            "resources/flatColor.fsh");
+    // TODO: We don't need to set properties here because both spriteShader and flatColorShader have
+    //       position (the only shared attribute) at location 0 (hard-specified in the shader file)
 
     // Load VBO/VAO data
     float vertexLocData[12] = {-0.5f, -0.5f, 0.0f,
@@ -283,15 +290,15 @@ void dge_loadDefaultShaders()
     glBindBuffer(GL_ARRAY_BUFFER, vertexLocBuffer);
     glBufferData(GL_ARRAY_BUFFER, 4*3*sizeof(float), vertexLocData,
                  GL_STATIC_DRAW);
-    glEnableVertexAttribArray(positionLoc);
-    glVertexAttribPointer(positionLoc, 3, GL_FLOAT, false, 0, 0);
+    glEnableVertexAttribArray(spritePositionLoc);
+    glVertexAttribPointer(spritePositionLoc, 3, GL_FLOAT, false, 0, 0);
 
     glGenBuffers(1, &texCoordBuffer);
     glBindBuffer(GL_ARRAY_BUFFER, texCoordBuffer);
     glBufferData(GL_ARRAY_BUFFER, 4*2*sizeof(float), texCoordData,
                  GL_STATIC_DRAW);
-    glEnableVertexAttribArray(texCoordLoc);
-    glVertexAttribPointer(texCoordLoc, 2, GL_FLOAT, false, 0, 0);
+    glEnableVertexAttribArray(spriteTexCoordLoc);
+    glVertexAttribPointer(spriteTexCoordLoc, 2, GL_FLOAT, false, 0, 0);
 
     glGenBuffers(1, &indexBuffer);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
@@ -396,6 +403,30 @@ void dge_renderString(CameraState camera, const char* string, int length, Vector
         position.x += size;
     }
 
+    glBindVertexArray(0);
+    glUseProgram(0);
+}
+
+void dge_renderQuad(CameraState camera, Vector2 centre, Vector2 size, float rotation, Vector4 color)
+{
+    glUseProgram(flatColorShader);
+    dge_updateShaderCameraState(camera, flatColorShader);
+
+    float cosTheta = cos(rotation);
+    float sinTheta = sin(rotation);
+    float modelMatrix[16] = {cosTheta*size.x, sinTheta*size.y, 0, 0,
+                             -sinTheta*size.x, cosTheta*size.y, 0, 0,
+                             0, 0, 1, 0,
+                             centre.x, centre.y, 0, 1};
+
+    GLint colorLoc = glGetUniformLocation(flatColorShader, "colorTint");
+    GLint modelMatrixLoc = glGetUniformLocation(flatColorShader, "modelMatrix");
+
+    glUniform4f(colorLoc, color.x, color.y, color.z, color.w);
+    glUniformMatrix4fv(modelMatrixLoc, 1, false, modelMatrix);
+
+    glBindVertexArray(spriteVAO);
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, NULL);
     glBindVertexArray(0);
     glUseProgram(0);
 }
