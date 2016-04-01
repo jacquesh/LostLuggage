@@ -1,3 +1,4 @@
+#define NOMINMAX
 #include <SDL.h>
 
 #include <stdio.h>
@@ -56,14 +57,18 @@ bool handleInput(GameState* game)
     return keepRunning;
 }
 
-void initGame(GameState* game)
+void loadLevel(GameState* game, const char* filename)
 {
-    loadRenderData();
+    if(game->currentLevel)
+    {
+        delete game->currentLevel;
+        game->bagList.pointerClear();
+    }
 
     game->camera.position = Vector2(-grid_size, -grid_size);
     game->camera.size = Vector2(640.0f, 480.f);
 
-    std::fstream fin("resources/level0.json", std::fstream::in);
+    std::fstream fin(filename, std::fstream::in);
     picojson::value v;
     std::string err;
     std::istream_iterator<char> input(fin);
@@ -77,6 +82,8 @@ void initGame(GameState* game)
     int bagCount;
     int bagX;
     int bagY;
+    char bagCategory;
+    Vector2 bagSize(grid_size*0.5f, grid_size*0.5f);
     picojson::array luggage = v.get("luggage").get<picojson::array>();
     for(picojson::array::iterator it = luggage.begin();
                                   it != luggage.end();
@@ -84,18 +91,45 @@ void initGame(GameState* game)
     {
         bagX = round((*it).get<picojson::array>()[0].get<double>());
         bagY = round((*it).get<picojson::array>()[1].get<double>());
-        Bag* bag = new Bag(Vector2(bagX, bagY), Vector2(grid_size*0.5, grid_size*0.5), game->currentLevel);
+        bagCategory = (*it).get<picojson::array>()[2].to_str()[0];
+        Bag* bag = new Bag(Vector2(bagX, bagY), bagSize, game->currentLevel);
+        bag->category = bagCategory - 'A';
         game->bagList.insert(bag);
     }
     fin.close();
+}
+
+void initGame(GameState* game)
+{
+    loadRenderData();
+
+    game->camera.position = Vector2(-grid_size, -grid_size);
+    game->camera.size = Vector2(640.0f, 480.f);
+
+    loadLevel(game, "resources/level0.json");
 }
 
 bool updateGame(GameState* game, float deltaTime)
 {
     bool keepRunning = handleInput(game);;
 
+    int activeBagCount = game->bagList.size();
     for (int i = 0; i< game->bagList.size(); ++i)
+    {
         game->bagList[i]->updatePosition(deltaTime);
+        Vector2I lastLoc = game->bagList[i]->lastPosition;
+        MapObject* lastLocObj = game->currentLevel->map[lastLoc.y][lastLoc.x];
+        if(!lastLocObj || (lastLocObj->type == MapObjectType::bin))
+        {
+            activeBagCount -= 1;
+        }
+    }
+
+    if(activeBagCount <= 0)
+    {
+        loadLevel(game, "resources/level0.json");
+        // TODO: Game over (did we win? Nobody knows...its a MYSTERY!)
+    }
 
     return keepRunning;
 }

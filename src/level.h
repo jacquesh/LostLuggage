@@ -16,11 +16,28 @@ enum Direction
   down
 };
 
-struct Conveyer
+enum MapObjectType
+{
+    conveyer,
+    bin
+};
+
+struct MapObject
+{
+    MapObjectType type;
+};
+
+struct Conveyer : MapObject
 {
   Direction dir;
   Conveyer(Direction _dir);
   Vector2I getSpeed();
+};
+
+struct Bin : MapObject
+{
+  int category;
+  Bin(int _cat);
 };
 
 struct Level
@@ -28,7 +45,7 @@ struct Level
   int width;
   int height;
   int **conveyerParent;
-  Conveyer ***map;
+  MapObject ***map;
   Level(int _width, int _height);
   Level(picojson::value v);
   ~Level();

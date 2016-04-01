@@ -13,6 +13,7 @@ int twodfind(int** parents, int a, int b, int width)
 Conveyer::Conveyer(Direction _dir)
   : dir(_dir)
 {
+    type = MapObjectType::conveyer;
 }
 
 Vector2I Conveyer::getSpeed()
@@ -32,14 +33,20 @@ Vector2I Conveyer::getSpeed()
   }
 }
 
+Bin::Bin(int _cat)
+    :  category(_cat)
+{
+    type = MapObjectType::bin;
+}
+
 Level::Level(int _width, int _height)
   : width(_width) , height(_height)
 {
-  map = new Conveyer** [height];
+  map = new MapObject** [height];
   conveyerParent = new int* [height];
   for (int i = 0; i<height; i++)
   {
-    map[i] = new Conveyer* [width];
+    map[i] = new MapObject* [width];
     conveyerParent[i] = new int [width];
     for (int j = 0; j<width; j++)
     {
@@ -53,14 +60,13 @@ Level::Level(picojson::value v)
 {
     height = round(v.get("size").get<picojson::array>()[0].get<double>());
     width  = round(v.get("size").get<picojson::array>()[1].get<double>());
-  map = new Conveyer** [height];
+  map = new MapObject** [height];
   conveyerParent = new int* [height];
-
 
   for (int i = height-1; i>=0; i--)
   {
     std::stringstream sin(v.get("map").get<picojson::array>()[height-i-1].to_str());
-    map[i] = new Conveyer* [width];
+    map[i] = new MapObject* [width];
     conveyerParent[i] = new int [width];
     for (int j = 0; j<width; j++)
     {
@@ -68,6 +74,11 @@ Level::Level(picojson::value v)
       conveyerParent[i][j] = i * width + j;
       char v;
       sin>>v;
+      if((v >= 'A') && (v <= 'Z'))
+      {
+        int binCategory = v - 'A';
+        map[i][j] = new Bin(binCategory);
+      }
       switch (v)
       {
         case '.':
@@ -93,23 +104,40 @@ Level::Level(picojson::value v)
     {
         for (int j = 0; j<width; j++)
         {
+            MapObject* obj = map[i][j];
+            if((obj == nullptr) || (obj->type != MapObjectType::conveyer))
+                continue;
+            Conveyer* objConveyer = (Conveyer*)obj;
+
             for (int di = -1; di<2; di+=2)
             {
-                if (i+di > 0 and i+di < height)
-                    if (map[i][j] != nullptr and map[i+di][j] != nullptr)
-                        if (map[i][j]->dir == map[i+di][j]->dir)
+                if ((i+di > 0) && (i+di < height))
+                {
+                    MapObject* nextObj = map[i+di][j];
+                    if((nextObj != nullptr) && (nextObj->type == MapObjectType::conveyer))
+                    {
+                        Conveyer* nextObjConveyer = (Conveyer*)nextObj;
+                        if (objConveyer->dir == nextObjConveyer->dir)
                         {
                             conveyerParent[i][j] = twodfind(conveyerParent,i+di,j,width);
                         }
+                    }
+                }
             }
             for (int dj = -1; dj<2; dj+=2)
             {
-                if (j + dj > 0 and j + dj < width)
-                    if (map[i][j] != nullptr and map[i][j+dj] != nullptr)
-                        if (map[i][j]->dir == map[i][j+dj]->dir)
+                if ((j + dj > 0) && (j + dj < width))
+                {
+                    MapObject* nextObj = map[i][j+dj];
+                    if((nextObj != nullptr) && (nextObj->type == MapObjectType::conveyer))
+                    {
+                        Conveyer* nextObjConveyer = (Conveyer*)nextObj;
+                        if (objConveyer->dir == nextObjConveyer->dir)
                         {
                             conveyerParent[i][j] = twodfind(conveyerParent,i,j+dj,width);
                         }
+                    }
+                }
             }
         }
     }
@@ -124,22 +152,26 @@ void Level::flipConveyers(int x, int y)
     for (int i = 0; i<height; i++)
         for (int j = 0; j<width; j++)
         {
-            if (map[i][j] == nullptr) continue;
+            MapObject* obj = map[i][j];
+            if ((obj == nullptr) || (obj->type != MapObjectType::conveyer))
+                continue;
+            Conveyer* objConveyer = (Conveyer*)obj;
+
             if (conveyerParent[i][j] == id)
             {
-                switch (map[i][j]->dir)
+                switch (objConveyer->dir)
                 {
                     case up:
-                        map[i][j]->dir = down;
+                        objConveyer->dir = down;
                         break;
                     case down:
-                        map[i][j]->dir = up;
+                        objConveyer->dir = up;
                         break;
                     case right:
-                        map[i][j]->dir = left;
+                        objConveyer->dir = left;
                         break;
                     case left:
-                        map[i][j]->dir = right;
+                        objConveyer->dir = right;
                         break;
                 }
             }

@@ -8,6 +8,7 @@ struct Bag
 {
   Vector2 position;
   Vector2 size;
+  int category;
   Level* level;
   float alongLine;
   Vector2I lastPosition;
