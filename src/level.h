@@ -15,6 +15,7 @@ struct Conveyer
 {
   Direction dir;
   Conveyer(Direction _dir);
+  Vector2 getSpeed();
 };
 
 struct Level 
