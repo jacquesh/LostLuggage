@@ -79,6 +79,14 @@ Vector2 operator *(float lhs, Vector2 rhs)
     return result;
 }
 
+Vector2 operator *(Vector2 lhs, Vector2 rhs)
+{
+    Vector2 result;
+    result.x = lhs.x * rhs.x;
+    result.y = lhs.x * rhs.y;
+    return result;
+}
+
 // TODO: Shouldn't these return Vector2&?
 Vector2 operator +=(Vector2& lhs, Vector2 rhs)
 {
@@ -149,6 +157,14 @@ Vector2 operator *(float lhs, Vector2I rhs)
     Vector2 result;
     result.x = lhs * rhs.x;
     result.y = lhs * rhs.y;
+    return result;
+}
+
+Vector2I operator *(Vector2I lhs, Vector2I rhs)
+{
+    Vector2I result;
+    result.x = lhs.x * rhs.x;
+    result.y = lhs.y * rhs.y;
     return result;
 }
 

@@ -45,6 +45,7 @@ Vector2I operator +(Vector2I lhs, Vector2I rhs);
 Vector2I operator -(Vector2I lhs, Vector2I rhs);
 Vector2I operator *(Vector2I lhs, int32 rhs);
 Vector2I operator *(int32 lhs, Vector2I rhs);
+Vector2I operator *(Vector2I lhs, Vector2I rhs);
 Vector2 operator *(Vector2I lhs, float rhs);
 Vector2 operator *(float lhs, Vector2I rhs);
 Vector2I operator +=(Vector2I& lhs, Vector2I rhs);
@@ -55,6 +56,7 @@ Vector2 operator -(Vector2 lhs, Vector2 rhs);
 Vector2 operator -(Vector2 rhs);
 Vector2 operator *(Vector2 lhs, float rhs);
 Vector2 operator *(float lhs, Vector2 rhs);
+Vector2 operator *(Vector2 lhs, Vector2 rhs);
 
 // TODO: Shouldn't these return Vector2&?
 Vector2 operator +=(Vector2& lhs, Vector2 rhs);
