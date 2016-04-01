@@ -1,0 +1,8 @@
+# Project Structure
+build/
+lib/
+resources/
+
+# Vim Metafiles
+*.swp
+
