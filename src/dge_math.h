@@ -3,6 +3,7 @@
 
 #include "dge.h"
 #include <math.h>
+#include <stdlib.h>
 
 
 #define PI 3.1415926f

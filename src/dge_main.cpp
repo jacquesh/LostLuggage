@@ -21,8 +21,11 @@ void renderGame(GameState* game);
 void lateRender(GameState* game);
 void cleanupGame(GameState* game);
 
-
-int SDL_main(int argc, char* argv[])
+#ifdef __linux__
+  int main(int argc, char* argv[])
+#else
+  int SDL_main(int argc, char* argv[])
+#endif
 {
     // TODO: Theres a (potential) difference between the version of SDL that we compiled with
     //       and the version we're running with (so maybe thats worth mentioning here)
