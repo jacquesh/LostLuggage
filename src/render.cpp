@@ -47,7 +47,7 @@ void renderGame(GameState* game)
             {
                 Vector2 cellCentre(x*GRID_SIZE, y*GRID_SIZE);
                 dge_renderQuad(game->camera, cellCentre, cellSize, 0.0f, white);
-                char* dirChar = "";
+                const char* dirChar = "";
                 switch(conv->dir)
                 {
                     case Direction::left: dirChar = "<"; break;
