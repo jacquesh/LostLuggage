@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 #include <fstream>
+#include <algorithm>
 
 #include "imgui.h"
 #include "imgui_impl_sdl_gl3.h"
@@ -15,6 +16,8 @@
 #include "game.h"
 
 #include "render.h"
+
+float grid_size = 64.f;
 
 bool handleInput(GameState* game)
 {
@@ -49,11 +52,13 @@ void initGame(GameState* game)
 {
     loadRenderData();
 
-    game->camera.position = Vector2(-GRID_SIZE, -GRID_SIZE);
+    game->camera.position = Vector2(-grid_size, -grid_size);
     game->camera.size = Vector2(640.0f, 480.f);
 
-    std::fstream fin("resources/test.lvl", std::fstream::in);
+    std::fstream fin("resources/level0.lvl", std::fstream::in);
     game->currentLevel = new Level(fin);
+    grid_size = std::min(grid_size, 640.f / (game->currentLevel->width + 1));
+    grid_size = std::min(grid_size, 480.f / (game->currentLevel->height + 1));
     int bagCount;
     int bagX;
     int bagY;
@@ -62,7 +67,7 @@ void initGame(GameState* game)
     {
         fin >> bagX;
         fin >> bagY;
-        Bag* bag = new Bag(Vector2(bagX, bagY), Vector2(GRID_SIZE, GRID_SIZE), game->currentLevel);
+        Bag* bag = new Bag(Vector2(bagX, bagY), Vector2(grid_size*0.5, grid_size*0.5), game->currentLevel);
         game->bagList.insert(bag);
     }
     fin.close();

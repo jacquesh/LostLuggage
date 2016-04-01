@@ -36,7 +36,7 @@ void renderGame(GameState* game)
 {
     glClear(GL_COLOR_BUFFER_BIT);
 
-    Vector2 cellSize(GRID_SIZE, GRID_SIZE);
+    Vector2 cellSize(grid_size, grid_size);
     Vector4 white(1.0f, 1.0f, 1.0f, 1.0f);
     for(int y=0; y<game->currentLevel->height; ++y)
     {
@@ -45,7 +45,7 @@ void renderGame(GameState* game)
             Conveyer* conv = game->currentLevel->map[y][x];
             if(conv)
             {
-                Vector2 cellCentre(x*GRID_SIZE, y*GRID_SIZE);
+                Vector2 cellCentre(x*grid_size, y*grid_size);
                 dge_renderQuad(game->camera, cellCentre, cellSize, 0.0f, white);
                 const char* dirChar = "";
                 switch(conv->dir)
@@ -56,7 +56,7 @@ void renderGame(GameState* game)
                     case Direction::down: dirChar = "v"; break;
                     default: dirChar = "x";
                 }
-                dge_renderString(game->camera, dirChar, 1, cellCentre, GRID_SIZE/2.0f, white);
+                dge_renderString(game->camera, dirChar, 1, cellCentre, grid_size/2.0f, white);
             }
         }
     }
@@ -65,7 +65,7 @@ void renderGame(GameState* game)
     for(int bagIndex=0; bagIndex<game->bagList.size(); ++bagIndex)
     {
         Bag bag = *game->bagList[bagIndex];
-        Vector2 position = bag.position * GRID_SIZE;
+        Vector2 position = bag.position * grid_size;
         dge_renderQuad(game->camera, position, bag.size, 0.0f, red);
     }
 

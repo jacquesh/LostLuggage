@@ -9,7 +9,7 @@
 #include "level.h"
 #include "bag.h"
 
-#define GRID_SIZE 64.0f
+extern float grid_size;
 
 struct GameState
 {
