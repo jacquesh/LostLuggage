@@ -1,6 +1,7 @@
 #include <SDL.h>
 
 #include <stdio.h>
+#include <fstream>
 
 #include "imgui.h"
 #include "imgui_impl_sdl_gl3.h"
@@ -51,7 +52,20 @@ void initGame(GameState* game)
     game->camera.position = Vector2(-GRID_SIZE, -GRID_SIZE);
     game->camera.size = Vector2(640.0f, 480.f);
 
-    game->currentLevel = new Level("resources/test.lvl");
+    std::fstream fin("resources/test.lvl", std::fstream::in);
+    game->currentLevel = new Level(fin);
+    int bagCount;
+    int bagX;
+    int bagY;
+    fin >> bagCount;
+    for(int i=0; i<bagCount; ++i)
+    {
+        fin >> bagX;
+        fin >> bagY;
+        Bag* bag = new Bag(Vector2(bagX, bagY), Vector2(GRID_SIZE, GRID_SIZE), game->currentLevel);
+        game->bagList.insert(bag);
+    }
+    fin.close();
 }
 
 bool updateGame(GameState* game, float deltaTime)
