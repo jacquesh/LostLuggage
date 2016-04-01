@@ -45,14 +45,15 @@ bool handleInput(GameState* game)
     return keepRunning;
 }
 
-void initGame(GameState* game)
+void loadLevel(GameState* game, const char* filename)
 {
-    loadRenderData();
+    if(game->currentLevel)
+    {
+        delete game->currentLevel;
+        game->bagList.pointerClear();
+    }
 
-    game->camera.position = Vector2(-GRID_SIZE, -GRID_SIZE);
-    game->camera.size = Vector2(640.0f, 480.f);
-
-    std::fstream fin("resources/test.lvl", std::fstream::in);
+    std::fstream fin(filename, std::fstream::in);
     game->currentLevel = new Level(fin);
     int bagCount;
     int bagX;
@@ -71,12 +72,37 @@ void initGame(GameState* game)
     fin.close();
 }
 
+void initGame(GameState* game)
+{
+    loadRenderData();
+
+    game->camera.position = Vector2(-GRID_SIZE, -GRID_SIZE);
+    game->camera.size = Vector2(640.0f, 480.f);
+
+    loadLevel(game, "resources/test.lvl");
+}
+
 bool updateGame(GameState* game, float deltaTime)
 {
     bool keepRunning = handleInput(game);;
 
+    int activeBagCount = game->bagList.size();
     for (int i = 0; i< game->bagList.size(); ++i)
+    {
         game->bagList[i]->updatePosition(deltaTime);
+        Vector2I lastLoc = game->bagList[i]->lastPosition;
+        MapObject* lastLocObj = game->currentLevel->map[lastLoc.y][lastLoc.x];
+        if(!lastLocObj || (lastLocObj->type == MapObjectType::bin))
+        {
+            activeBagCount -= 1;
+        }
+    }
+
+    if(activeBagCount <= 0)
+    {
+        loadLevel(game, "resources/test.lvl");
+        // TODO: Game over (did we win? Nobody knows...its a MYSTERY!)
+    }
 
     return keepRunning;
 }
