@@ -78,7 +78,7 @@ void renderGame(GameState* game)
     {
         Bag bag = *game->bagList[bagIndex];
         Vector2 position = bag.position * GRID_SIZE;
-        dge_renderQuad(game->camera, position, cellSize*bag.size*0.8f, 0.0f, red);
+        dge_renderQuad(game->camera, position, bag.size, 0.0f, red);
     }
 
     ImVec2 windowLoc(50.0f, 50.0f);

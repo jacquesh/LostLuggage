@@ -35,9 +35,8 @@ Level::Level(int _width, int _height)
   }
 }
 
-Level::Level(const char* filename)
+Level::Level(std::fstream& fin)
 {
-  std::fstream fin (filename, std::fstream::in);
   fin>>height>>width;
   map = new Conveyer** [height];
   for (int i = height-1; i>=0; i--)
@@ -69,7 +68,6 @@ Level::Level(const char* filename)
       }
     }
   }
-  fin.close();
 }
 
 Level::~Level()

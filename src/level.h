@@ -1,5 +1,7 @@
 #ifndef LEVEL_H
-#define LEVEL_H 
+#define LEVEL_H
+
+#include <fstream>
 
 #include "dge_math.h"
 
@@ -18,13 +20,13 @@ struct Conveyer
   Vector2 getSpeed();
 };
 
-struct Level 
+struct Level
 {
   int width;
   int height;
   Conveyer ***map;
   Level(int _width, int _height);
-  Level(const char* filename);
+  Level(std::fstream& fin);
   ~Level();
   Vector2 getVelocity(Vector2 topLeft, Vector2 bottomRight);
 };
