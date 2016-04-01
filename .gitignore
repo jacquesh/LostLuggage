@@ -1,7 +1,10 @@
 # Project Structure
 build/
 lib/
-resources/
+resources/*
+!resources/*.vsh
+!resources/*.fsh
+!resources/*.lvl
 
 # Vim Metafiles
 *.swp
