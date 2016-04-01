@@ -16,7 +16,7 @@ struct WindowData
     int height;
 
     uint32 flags;
-    char* title;
+    const char* title;
 };
 
 struct CameraState
@@ -29,7 +29,7 @@ struct CameraState
 static inline void __glPrintError(const char* file, int line, bool alwaysPrint)
 {
     GLenum error = glGetError();
-    char* errorStr;
+    const char* errorStr;
     if(alwaysPrint || (error != GL_NO_ERROR))
     {
         switch(error)

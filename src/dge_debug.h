@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 
-#define debug(MSG, ...) fprintf(stderr, "(%s:%d) "MSG"\n", __FILE__, __LINE__, ##__VA_ARGS__)
+#define debug(MSG, ...) fprintf(stderr, "(%s:%d) " MSG "\n", __FILE__, __LINE__, ##__VA_ARGS__)
 
 // NOTE: We need the else-block here so that if somebody says "if(...) assert(0) else ..."
 //       then it doesn't match the else with the wrong if (namely the one inside the assert)
