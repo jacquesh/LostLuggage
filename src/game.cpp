@@ -46,14 +46,20 @@ bool handleInput(GameState* game)
 
 void initGame(GameState* game)
 {
+    loadRenderData();
+
+    game->camera.position = Vector2(-GRID_SIZE, -GRID_SIZE);
+    game->camera.size = Vector2(640.0f, 480.f);
+
+    game->currentLevel = new Level("resources/test.lvl");
 }
 
 bool updateGame(GameState* game, float deltaTime)
 {
     bool keepRunning = handleInput(game);;
+
     return keepRunning;
 }
-
 
 void cleanupGame(GameState* game)
 {

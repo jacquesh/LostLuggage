@@ -48,8 +48,30 @@ void renderGame(GameState* game)
 {
     glClear(GL_COLOR_BUFFER_BIT);
 
-    ImVec2 windowLoc(40.0f, 300.0f);
-    ImVec2 windowSize(400.0f, 200.f);
+    Vector2 cellSize(GRID_SIZE, GRID_SIZE);
+    Vector4 white(1.0f, 1.0f, 1.0f, 1.0f);
+    for(int y=0; y<game->currentLevel->height; ++y)
+    {
+        for(int x=0; x<game->currentLevel->width; ++x)
+        {
+            if(game->currentLevel->map[y][x])
+            {
+                Vector2 cellCentre(x*GRID_SIZE, y*GRID_SIZE);
+                dge_renderQuad(game->camera, cellCentre, cellSize, 0.0f, white);
+            }
+        }
+    }
+
+    Vector4 red(1.0f, 0.0f, 0.0f, 1.0f);
+    for(int bagIndex=0; bagIndex<game->bagList.size(); ++bagIndex)
+    {
+        Bag bag = *game->bagList[bagIndex];
+        Vector2 position = bag.position * GRID_SIZE;
+        dge_renderQuad(game->camera, position, cellSize*bag.size*0.8f, 0.0f, red);
+    }
+
+    ImVec2 windowLoc(50.0f, 50.0f);
+    ImVec2 windowSize(200.0f, 200.f);
     int UIFlags = ImGuiWindowFlags_NoMove |
                   ImGuiWindowFlags_NoResize |
                   ImGuiWindowFlags_NoTitleBar |
@@ -58,14 +80,9 @@ void renderGame(GameState* game)
     ImGui::SetWindowPos(windowLoc);
     ImGui::SetWindowSize(windowSize);
 
-    ImGui::Text("Treasure Defender Clone!");
+    ImGui::Text("Lost Luggage Clone");
     if(ImGui::Button("Start", ImVec2(100, 50)))
     {
-        game->currentScene = SCENE_INGAME;
-    }
-    if(ImGui::Button("Quit", ImVec2(100, 50)))
-    {
-        // TODO: Quit the game
     }
 
     ImGui::End();
