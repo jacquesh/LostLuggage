@@ -16,7 +16,7 @@ struct WindowData
     int height;
 
     uint32 flags;
-    char* title;
+    const char* title;
 };
 
 struct CameraState

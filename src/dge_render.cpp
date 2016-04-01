@@ -50,7 +50,7 @@ GLuint dge_loadShader(const char* shaderFilename, GLenum shaderType)
     int64 bytesRead = SDL_RWread(shaderFile, shaderText, 1, shaderSize);
     if(bytesRead != shaderSize)
     {
-        debug("Expected to read %d bytes from %s, instead got %d", shaderSize, shaderFilename, bytesRead);
+        debug("Expected to read %ld bytes from %s, instead got %ld", shaderSize, shaderFilename, bytesRead);
         free(shaderText);
         SDL_RWclose(shaderFile);
         return 0;

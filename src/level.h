@@ -24,7 +24,7 @@ struct Level
   int height;
   Conveyer ***map;
   Level(int _width, int _height);
-  Level(char* filename);
+  Level(const char* filename);
   ~Level();
   Vector2 getVelocity(Vector2 topLeft, Vector2 bottomRight);
 };

@@ -35,7 +35,7 @@ Level::Level(int _width, int _height)
   }
 }
 
-Level::Level(char* filename)
+Level::Level(const char* filename)
 {
   std::fstream fin (filename, std::fstream::in);
   fin>>height>>width;
