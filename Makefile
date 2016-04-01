@@ -27,7 +27,7 @@ ifeq ($(OS),Windows_NT)
 	LINKFLAGS= -incremental:no -manifest:no -SUBSYSTEM:CONSOLE -LIBPATH:lib/$(ARCH)
 	LINKLIBS= OpenGL32.lib SDL2.lib SDL2main.lib
 	LINKCOMPILEFLAGS= -Fe$(BUILDDIR)/$(TARGET) -link $(LINKFLAGS) $(LINKLIBS)
-	COMPILEFLAGS= -c -Iinclude -Iinclude/SDL -Isrc -W4 -D_CRT_SECURE_NO_WARNINGS -Wall -Fo
+	COMPILEFLAGS= -c -Iinclude -Iinclude/SDL -Isrc -W4 -D_CRT_SECURE_NO_WARNINGS -Fo
 else
 	COMMONFLAGS= -g --std=c++11
 	LINKCOMPILEFLAGS= -o $(BUILDDIR)/$(TARGET) -lGL -ldl `sdl2-config --libs`
