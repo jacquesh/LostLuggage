@@ -19,6 +19,9 @@ endif
 SRC=$(wildcard src/*.cpp)
 OBJ=$(patsubst src/%, $(BUILDDIR)/%, $(SRC:%.cpp=%.obj))
 
+DGE_SRC=$(wildcard dge/src/*.cpp)
+DGE_OBJ=$(patsubst dge/src/%, $(BUILDDIR)/%, $(DGE_SRC:%.cpp=%.obj))
+
 IMGUI_SRC=$(wildcard imgui/*.cpp)
 IMGUI_OBJ=$(patsubst imgui/%, $(BUILDDIR)/%, $(IMGUI_SRC:%.cpp=%.obj))
 
@@ -27,11 +30,11 @@ ifeq ($(OS),Windows_NT)
 	LINKFLAGS= -incremental:no -manifest:no -SUBSYSTEM:CONSOLE -LIBPATH:lib/$(ARCH)
 	LINKLIBS= OpenGL32.lib SDL2.lib SDL2main.lib
 	LINKCOMPILEFLAGS= -Fe$(BUILDDIR)/$(TARGET) -link $(LINKFLAGS) $(LINKLIBS)
-	COMPILEFLAGS= -c -Iinclude -Iinclude/SDL -Isrc -W4 -D_CRT_SECURE_NO_WARNINGS -Fo
+	COMPILEFLAGS= -c -Iinclude -Idge/src -Iinclude/SDL -Isrc -W4 -D_CRT_SECURE_NO_WARNINGS -Fo
 else
 	COMMONFLAGS= -g --std=c++11
 	LINKCOMPILEFLAGS= -o $(BUILDDIR)/$(TARGET) -lGL -ldl `sdl2-config --libs`
-	COMPILEFLAGS= -c `sdl2-config --cflags` -Iinclude -Isrc -D_CRT_SECURE_NO_WARNINGS -Wall -o
+	COMPILEFLAGS= -c `sdl2-config --cflags` -Iinclude -Idge/src -Isrc -D_CRT_SECURE_NO_WARNINGS -Wall -o
 endif
 
 ifeq ($(OS),Windows_NT)
@@ -46,13 +49,16 @@ endif
 
 
 
-$(TARGET): $(BUILDDIR) $(BUILDDIR)/$(RESOURCEDIR) $(OBJ) $(IMGUI_OBJ)
-	$(CXX) $(OBJ) $(IMGUI_OBJ) $(COMMONFLAGS) $(LINKCOMPILEFLAGS)
+$(TARGET): $(BUILDDIR) $(BUILDDIR)/$(RESOURCEDIR) $(OBJ) $(DGE_OBJ) $(IMGUI_OBJ)
+	$(CXX) $(OBJ) $(DGE_OBJ) $(IMGUI_OBJ) $(COMMONFLAGS) $(LINKCOMPILEFLAGS)
 
 run:
 	@cd $(BUILDDIR); ./$(TARGET)
 
 $(BUILDDIR)/%.obj: src/%.cpp
+	$(CXX) $< $(COMMONFLAGS) $(COMPILEFLAGS)$@
+
+$(BUILDDIR)/%.obj: dge/src/%.cpp
 	$(CXX) $< $(COMMONFLAGS) $(COMPILEFLAGS)$@
 
 $(BUILDDIR)/%.obj: imgui/%.cpp
