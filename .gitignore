@@ -4,7 +4,7 @@ lib/
 resources/*
 !resources/*.vsh
 !resources/*.fsh
-!resources/*.lvl
+!resources/*.json
 
 # Vim Metafiles
 *.swp

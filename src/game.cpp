@@ -5,6 +5,8 @@
 #include <fstream>
 #include <algorithm>
 
+#include <picojson.h>
+
 #include "imgui.h"
 #include "imgui_impl_sdl_gl3.h"
 
@@ -63,27 +65,36 @@ void loadLevel(GameState* game, const char* filename)
         game->bagList.pointerClear();
     }
 
+    game->camera.position = Vector2(-grid_size, -grid_size);
+    game->camera.size = Vector2(640.0f, 480.f);
+
     std::fstream fin(filename, std::fstream::in);
-    game->currentLevel = new Level(fin);
+    picojson::value v;
+    std::string err;
+    std::istream_iterator<char> input(fin);
+    input = picojson::parse(v,input, std::istream_iterator<char>(),&err);
+    if (! err.empty()) debug("%s",err.c_str());
+
+    game->currentLevel = new Level(v);
+
     grid_size = std::min(grid_size, 640.f / (game->currentLevel->width + 1));
     grid_size = std::min(grid_size, 480.f / (game->currentLevel->height + 1));
-    int bagCount;
     int bagX;
     int bagY;
     char bagCategory;
-    fin >> bagCount;
     Vector2 bagSize(grid_size*0.5f, grid_size*0.5f);
-    for(int i=0; i<bagCount; ++i)
+    picojson::array luggage = v.get("luggage").get<picojson::array>();
+    for(picojson::array::iterator it = luggage.begin();
+                                  it != luggage.end();
+                                  ++it)
     {
-        fin >> bagX;
-        fin >> bagY;
-        fin >> bagCategory;
-        Bag* bag = new Bag(Vector2(bagX, bagY), bagSize, game->currentLevel);
-        bag->category = bagCategory - 'A';
+        bagX = round((*it).get<picojson::array>()[0].get<double>());
+        bagY = round((*it).get<picojson::array>()[1].get<double>());
+        bagCategory = (*it).get<picojson::array>()[2].to_str()[0];
+        Bag* bag = new Bag(Vector2(bagX, bagY), bagSize, bagCategory - 'A', game->currentLevel);
         game->bagList.insert(bag);
     }
     fin.close();
-    game->currentLevel->flipConveyers(4,2);
 }
 
 void initGame(GameState* game)
@@ -93,7 +104,7 @@ void initGame(GameState* game)
     game->camera.position = Vector2(-grid_size, -grid_size);
     game->camera.size = Vector2(640.0f, 480.f);
 
-    loadLevel(game, "resources/test.lvl");
+    loadLevel(game, "resources/level0.json");
 }
 
 bool updateGame(GameState* game, float deltaTime)
@@ -114,7 +125,7 @@ bool updateGame(GameState* game, float deltaTime)
 
     if(activeBagCount <= 0)
     {
-        loadLevel(game, "resources/test.lvl");
+        loadLevel(game, "resources/level0.json");
         // TODO: Game over (did we win? Nobody knows...its a MYSTERY!)
     }
 

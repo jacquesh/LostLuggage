@@ -1,7 +1,7 @@
 #include "bag.h"
 
-Bag::Bag(Vector2 _position, Vector2 _size, Level* _level)
-  : position(_position), size(_size), level(_level), alongLine(1)
+Bag::Bag(Vector2 _position, Vector2 _size, int _category, Level* _level)
+  : position(_position), size(_size), category(_category), level(_level), alongLine(1)
 {
     lastPosition = Vector2I(position.x,position.y);
     nextPosition = Vector2I(position.x,position.y);

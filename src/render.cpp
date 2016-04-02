@@ -64,7 +64,7 @@ void renderGame(GameState* game)
                 {
                     Conveyer* conv = (Conveyer*)mapObj;
                     dge_renderQuad(game->camera, cellCentre, cellSize, 0.0f, white);
-                    char* dirChar = "";
+                    const char* dirChar = "";
                     switch(conv->dir)
                     {
                         case Direction::left: dirChar = "<"; break;
