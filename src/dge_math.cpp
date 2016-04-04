@@ -205,6 +205,15 @@ Vector4 operator *=(Vector4& lhs, Vector4 rhs)
 // ========================
 // Function implementations
 // ========================
+int dge_round(float x)
+{
+    return (int)(x + 0.5f);
+}
+int dge_round(double x)
+{
+    return (int)(x + 0.5);
+}
+
 float clamp(float x, float min, float max)
 {
     if(x < min)

@@ -79,6 +79,8 @@ Vector4 operator *=(Vector4& lhs, Vector4 rhs);
 
 
 int sign(int x);
+int dge_round(float x);
+int dge_round(double x);
 
 float clamp(float x, float min, float max);
 float lerp(float from, float to, float t);
