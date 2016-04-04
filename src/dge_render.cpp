@@ -327,6 +327,36 @@ void dge_updateShaderCameraState(CameraState camera, GLuint shader)
     glUniformMatrix4fv(viewingMatrixLoc, 1, false, viewingMatrix);
 }
 
+// TODO: These 2 functions both assume that the window is 640x480,
+//       we really need it to use the actual window size (for now the
+//       window is not resizable)
+Vector2 dge_screenToWorldPoint(CameraState camera, Vector2 point)
+{
+    int screenWidth = 640;
+    int screenHeight = 480;
+    Vector2 result = point;
+    result.y = screenHeight - result.y;
+
+    result.x *= camera.size.x/screenWidth;
+    result.y *= camera.size.y/screenHeight;
+
+    result += camera.position;
+    return result;
+}
+Vector2 dge_worldToScreenPoint(CameraState camera, Vector2 point)
+{
+    int screenWidth = 640;
+    int screenHeight = 480;
+    Vector2 result = point;
+    result -= camera.position;
+
+    result.x *= screenWidth/camera.size.x;
+    result.y *= screenWidth/camera.size.y;
+
+    result.y = screenHeight - result.y;
+    return result;
+}
+
 void dge_drawLine2D(CameraState camera, Vector2 fromLoc, Vector2 toLoc, Vector4 color)
 {
     glUseProgram(lineShader);
