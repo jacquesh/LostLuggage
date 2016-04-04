@@ -58,8 +58,8 @@ Level::Level(int _width, int _height)
 
 Level::Level(picojson::value v)
 {
-    height = round(v.get("size").get<picojson::array>()[0].get<double>());
-    width  = round(v.get("size").get<picojson::array>()[1].get<double>());
+    height = dge_round(v.get("size").get<picojson::array>()[0].get<double>());
+    width  = dge_round(v.get("size").get<picojson::array>()[1].get<double>());
   map = new MapObject** [height];
   conveyerParent = new int* [height];
 

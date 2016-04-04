@@ -88,8 +88,8 @@ void loadLevel(GameState* game, const char* filename)
                                   it != luggage.end();
                                   ++it)
     {
-        bagX = round((*it).get<picojson::array>()[0].get<double>());
-        bagY = round((*it).get<picojson::array>()[1].get<double>());
+        bagX = dge_round((*it).get<picojson::array>()[0].get<double>());
+        bagY = dge_round((*it).get<picojson::array>()[1].get<double>());
         bagCategory = (*it).get<picojson::array>()[2].to_str()[0];
         Bag* bag = new Bag(Vector2(bagX, bagY), bagSize, bagCategory - 'A', game->currentLevel);
         game->bagList.insert(bag);
