@@ -17,6 +17,8 @@ struct GameState
 
     Level* currentLevel;
     UnorderedList<Bag*> bagList;
+
+    float timeTillLevelRestart;
 };
 
 #endif

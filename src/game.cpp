@@ -102,13 +102,23 @@ void initGame(GameState* game)
 
     game->camera.position = Vector2(-grid_size, -grid_size);
     game->camera.size = Vector2(640.0f, 480.f);
+    game->timeTillLevelRestart = 0.0f;
 
     loadLevel(game, "resources/level0.json");
 }
 
 bool updateGame(GameState* game, float deltaTime)
 {
-    bool keepRunning = handleInput(game);;
+    bool keepRunning = handleInput(game);
+    if(game->timeTillLevelRestart > 0.0f)
+    {
+        game->timeTillLevelRestart -= deltaTime;
+        if(game->timeTillLevelRestart <= 0.0f)
+        {
+            loadLevel(game, "resources/level0.json");
+        }
+        return keepRunning;
+    }
 
     int activeBagCount = game->bagList.size();
     for (int i = 0; i< game->bagList.size(); ++i)
@@ -124,7 +134,7 @@ bool updateGame(GameState* game, float deltaTime)
 
     if(activeBagCount <= 0)
     {
-        loadLevel(game, "resources/level0.json");
+        game->timeTillLevelRestart = 1.0f;
         // TODO: Game over (did we win? Nobody knows...its a MYSTERY!)
     }
 
