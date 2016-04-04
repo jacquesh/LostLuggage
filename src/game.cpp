@@ -50,7 +50,9 @@ bool handleInput(GameState* game)
             } break;
             case  SDL_MOUSEBUTTONDOWN:
             {
-                game->currentLevel->flipConveyers(int(e.motion.x/grid_size)-1,int((480-e.motion.y)/grid_size)-1);
+                int gridX = dge_round((e.button.x + game->camera.position.x)/grid_size);
+                int gridY = dge_round((480 - e.button.y + game->camera.position.y)/grid_size);
+                game->currentLevel->flipConveyers(gridX, gridY);
             } break;
         }
     }
@@ -64,9 +66,6 @@ void loadLevel(GameState* game, const char* filename)
         delete game->currentLevel;
         game->bagList.pointerClear();
     }
-
-    game->camera.position = Vector2(-grid_size, -grid_size);
-    game->camera.size = Vector2(640.0f, 480.f);
 
     std::fstream fin(filename, std::fstream::in);
     picojson::value v;
