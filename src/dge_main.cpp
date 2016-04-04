@@ -150,7 +150,7 @@ void cleanupGame(GameState* game);
             // TODO: This deltaTime passed into update here is probably incorrect, surely
             //       if this loop runs multiple times, it'll progress the game by more time
             //       than has actually passed?
-            running = updateGame(&game, frameTime);
+            running &= updateGame(&game, frameTime);
 
             nextTickTime += tickDuration;
             ++ticksWithoutDraw;
