@@ -33,6 +33,12 @@ dge::Vector2I Conveyer::getSpeed()
   }
 }
 
+Wall::Wall(Direction _dir)
+  : dir(_dir)
+{
+    type = MapObjectType::wall;
+}
+
 Bin::Bin(int _cat)
     :  category(_cat)
 {
@@ -144,6 +150,23 @@ Level::Level(picojson::value v)
     for (int i = 0; i<height; i++)
         for (int j = 0; j<width; j++)
           twodfind(conveyerParent,i,j,width);
+    for(picojson::array::iterator it = v.get("walls").get<picojson::array>().begin();
+                                  it != v.get("walls").get<picojson::array>().end();
+                                  ++it)
+    {
+      int x = int((*it).get<picojson::array>()[0].get<double>());
+      int y = int((*it).get<picojson::array>()[1].get<double>());
+      int d = (*it).get<picojson::array>()[2].to_str()[0];
+      Direction dir;
+      switch (d)
+      {
+        case 'u': dir = up; break;
+        case 'd': dir = down; break;
+        case 'l': dir = left; break;
+        default: dir = right; break;
+      }
+      map[y-1][x-1] = new Wall(dir);
+    }
 }
 
 void Level::flipConveyers(int x, int y)

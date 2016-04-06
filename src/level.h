@@ -19,7 +19,8 @@ enum Direction
 enum MapObjectType
 {
     conveyer,
-    bin
+    bin,
+    wall
 };
 
 struct MapObject
@@ -38,6 +39,12 @@ struct Bin : MapObject
 {
   int category;
   Bin(int _cat);
+};
+
+struct Wall : MapObject
+{
+  Direction dir;
+  Wall(Direction _dir);
 };
 
 struct Level

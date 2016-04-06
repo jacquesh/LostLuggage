@@ -17,10 +17,15 @@ void Bag::updatePosition(float timestep)
     if (alongLine > 1)
     {
         lastPosition = nextPosition;
-        MapObject* nextPositionObj = level->map[nextPosition.y][nextPosition.x];
-        if ((nextPositionObj != nullptr) && (nextPositionObj->type == MapObjectType::conveyer))
+        MapObject* currentPositionObj = level->map[nextPosition.y][nextPosition.x];
+        if ((currentPositionObj != nullptr) && (currentPositionObj->type == MapObjectType::conveyer))
         {
             nextPosition += ((Conveyer*)level->map[lastPosition.y][lastPosition.x])->getSpeed();
+        }
+        MapObject* nextPositionObj = level->map[nextPosition.y][nextPosition.x];
+        if ((nextPositionObj != nullptr) && (nextPositionObj->type == MapObjectType::wall))
+        {
+            nextPosition = lastPosition;
         }
         alongLine -= 1;
     }

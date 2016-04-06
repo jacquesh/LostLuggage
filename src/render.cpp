@@ -82,6 +82,19 @@ void renderGame(GameState* game)
                     dge::renderQuad(game->camera, cellCentre, cellSize, 0.0f, white);
                     dge::renderQuad(game->camera, cellCentre, cellSize*0.8f, 0.0f, categoryColours[bin->category]);
                 } break;
+
+                case MapObjectType::wall:
+                {
+                    Wall* wall = (Wall*)mapObj;
+                    switch (wall->dir)
+                    {
+                      case Direction::up    : dge::renderQuad(game->camera, cellCentre+dge::Vector2(0,0.3*grid_size), cellSize*dge::Vector2(0.6f,0.2f), 0.0f, dge::Vector4 (0.5f,0.f,0.f,1.f)); break;
+                      case Direction::down  : dge::renderQuad(game->camera, cellCentre+dge::Vector2(0,-0.3*grid_size), cellSize*dge::Vector2(0.6f,0.2f), 0.0f, dge::Vector4 (0.5f,0.f,0.f,1.f)); break;
+                      case Direction::left  : dge::renderQuad(game->camera, cellCentre+dge::Vector2(-0.3*grid_size,0), cellSize*dge::Vector2(0.2f,0.6f), 0.0f, dge::Vector4 (0.5f,0.f,0.f,1.f)); break;
+                      case Direction::right : dge::renderQuad(game->camera, cellCentre+dge::Vector2(0.3*grid_size,0), cellSize*dge::Vector2(0.2f,0.6f), 0.0f, dge::Vector4 (0.5f,0.f,0.f,1.f)); break;
+                      default:;
+                    }
+                } break;
             }
         }
     }
