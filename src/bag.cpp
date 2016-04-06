@@ -1,16 +1,16 @@
 #include "bag.h"
 
-Bag::Bag(Vector2 _position, Vector2 _size, int _category, Level* _level)
+Bag::Bag(dge::Vector2 _position, dge::Vector2 _size, int _category, Level* _level)
   : position(_position), size(_size), category(_category), level(_level), alongLine(1)
 {
-    lastPosition = Vector2I(position.x,position.y);
-    nextPosition = Vector2I(position.x,position.y);
-    velocity = Vector2(0,0);
+    lastPosition = dge::Vector2I(position.x,position.y);
+    nextPosition = dge::Vector2I(position.x,position.y);
+    velocity = dge::Vector2(0,0);
 };
 
 void Bag::updatePosition(float timestep)
 {
-    position = lerp(lastPosition, nextPosition, alongLine);
+    position = dge::lerp(lastPosition, nextPosition, alongLine);
 
     alongLine += timestep;
 

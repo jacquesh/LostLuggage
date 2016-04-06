@@ -16,20 +16,20 @@ Conveyer::Conveyer(Direction _dir)
     type = MapObjectType::conveyer;
 }
 
-Vector2I Conveyer::getSpeed()
+dge::Vector2I Conveyer::getSpeed()
 {
   switch(dir)
   {
     case up:
-      return Vector2I(0,1);
+      return dge::Vector2I(0,1);
     case down:
-      return Vector2I(0,-1);
+      return dge::Vector2I(0,-1);
     case left:
-      return Vector2I(-1,0);
+      return dge::Vector2I(-1,0);
     case right:
-      return Vector2I(1,0);
+      return dge::Vector2I(1,0);
     default:
-      return Vector2I(0,0);
+      return dge::Vector2I(0,0);
   }
 }
 
@@ -58,8 +58,8 @@ Level::Level(int _width, int _height)
 
 Level::Level(picojson::value v)
 {
-    height = dge_round(v.get("size").get<picojson::array>()[0].get<double>());
-    width  = dge_round(v.get("size").get<picojson::array>()[1].get<double>());
+    height = dge::round(v.get("size").get<picojson::array>()[0].get<double>());
+    width  = dge::round(v.get("size").get<picojson::array>()[1].get<double>());
   map = new MapObject** [height];
   conveyerParent = new int* [height];
 

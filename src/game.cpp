@@ -50,8 +50,8 @@ bool handleInput(GameState* game)
             } break;
             case  SDL_MOUSEBUTTONDOWN:
             {
-                int gridX = dge_round((e.button.x + game->camera.position.x)/grid_size);
-                int gridY = dge_round((480 - e.button.y + game->camera.position.y)/grid_size);
+                int gridX = dge::round((e.button.x + game->camera.position.x)/grid_size);
+                int gridY = dge::round((480 - e.button.y + game->camera.position.y)/grid_size);
                 game->currentLevel->flipConveyers(gridX, gridY);
             } break;
         }
@@ -81,16 +81,16 @@ void loadLevel(GameState* game, const char* filename)
     int bagX;
     int bagY;
     char bagCategory;
-    Vector2 bagSize(grid_size*0.5f, grid_size*0.5f);
+    dge::Vector2 bagSize(grid_size*0.5f, grid_size*0.5f);
     picojson::array luggage = v.get("luggage").get<picojson::array>();
     for(picojson::array::iterator it = luggage.begin();
                                   it != luggage.end();
                                   ++it)
     {
-        bagX = dge_round((*it).get<picojson::array>()[0].get<double>());
-        bagY = dge_round((*it).get<picojson::array>()[1].get<double>());
+        bagX = dge::round((*it).get<picojson::array>()[0].get<double>());
+        bagY = dge::round((*it).get<picojson::array>()[1].get<double>());
         bagCategory = (*it).get<picojson::array>()[2].to_str()[0];
-        Bag* bag = new Bag(Vector2(bagX, bagY), bagSize, bagCategory - 'A', game->currentLevel);
+        Bag* bag = new Bag(dge::Vector2(bagX, bagY), bagSize, bagCategory - 'A', game->currentLevel);
         game->bagList.insert(bag);
     }
     fin.close();
@@ -100,8 +100,8 @@ void initGame(GameState* game)
 {
     loadRenderData();
 
-    game->camera.position = Vector2(-grid_size, -grid_size);
-    game->camera.size = Vector2(640.0f, 480.f);
+    game->camera.position = dge::Vector2(-grid_size, -grid_size);
+    game->camera.size = dge::Vector2(640.0f, 480.f);
     game->timeTillLevelRestart = 0.0f;
 
     loadLevel(game, "resources/level0.json");
@@ -124,7 +124,7 @@ bool updateGame(GameState* game, float deltaTime)
     for (int i = 0; i< game->bagList.size(); ++i)
     {
         game->bagList[i]->updatePosition(deltaTime);
-        Vector2I lastLoc = game->bagList[i]->lastPosition;
+        dge::Vector2I lastLoc = game->bagList[i]->lastPosition;
         MapObject* lastLocObj = game->currentLevel->map[lastLoc.y][lastLoc.x];
         if(!lastLocObj || (lastLocObj->type == MapObjectType::bin))
         {
@@ -145,7 +145,7 @@ void cleanupGame(GameState* game)
 {
 }
 
-void getWindowSettings(WindowData* windowData)
+void getWindowSettings(dge::WindowData* windowData)
 {
     windowData->x = SDL_WINDOWPOS_CENTERED;
     windowData->y = SDL_WINDOWPOS_CENTERED;

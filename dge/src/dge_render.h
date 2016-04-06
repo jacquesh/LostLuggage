@@ -8,76 +8,83 @@
 
 #include "dge_math.h"
 
-struct WindowData
+namespace dge
 {
-    int x;
-    int y;
-    int width;
-    int height;
-
-    uint32 flags;
-    const char* title;
-};
-
-struct CameraState
-{
-    Vector2 position;
-    Vector2 size;
-};
-
-#define glPrintError(alwaysPrint) __glPrintError(__FILE__, __LINE__, alwaysPrint)
-static inline void __glPrintError(const char* file, int line, bool alwaysPrint)
-{
-    GLenum error = glGetError();
-    const char* errorStr;
-    if(alwaysPrint || (error != GL_NO_ERROR))
+    struct WindowData
     {
-        switch(error)
-        {
-        case GL_NO_ERROR:
-            errorStr = "GL_NO_ERROR";
-            break;
-        case GL_INVALID_ENUM:
-            errorStr = "GL_INVALID_ENUM";
-            break;
-        case GL_INVALID_VALUE:
-            errorStr = "GL_INVALID_VALUE";
-            break;
-        case GL_INVALID_OPERATION:
-            errorStr = "GL_INVALID_OPERATION";
-            break;
-        case GL_INVALID_FRAMEBUFFER_OPERATION:
-            errorStr = "GL_INVALID_FRAMEBUFFER_OPERATION";
-            break;
-        case GL_OUT_OF_MEMORY:
-            errorStr = "GL_OUT_OF_MEMORY";
-            break;
-        default:
-            errorStr = "UNRECOGNIZED";
-            break;
-        }
+      int x;
+      int y;
+      int width;
+      int height;
 
-        fprintf(stderr, "(%s:%d) OpenGL error: %s\n", file, line, errorStr);
+      uint32 flags;
+      const char* title;
+    };
+
+    struct CameraState
+    {
+      Vector2 position;
+      Vector2 size;
+    };
+
+#define glPrintError(alwaysPrint) dge::__glPrintError(__FILE__, __LINE__, alwaysPrint)
+    static inline void __glPrintError(const char* file, int line, bool alwaysPrint)
+    {
+      GLenum error = glGetError();
+      const char* errorStr;
+      if(alwaysPrint || (error != GL_NO_ERROR))
+      {
+          switch(error)
+          {
+          case GL_NO_ERROR:
+              errorStr = "GL_NO_ERROR";
+              break;
+          case GL_INVALID_ENUM:
+              errorStr = "GL_INVALID_ENUM";
+              break;
+          case GL_INVALID_VALUE:
+              errorStr = "GL_INVALID_VALUE";
+              break;
+          case GL_INVALID_OPERATION:
+              errorStr = "GL_INVALID_OPERATION";
+              break;
+          case GL_INVALID_FRAMEBUFFER_OPERATION:
+              errorStr = "GL_INVALID_FRAMEBUFFER_OPERATION";
+              break;
+          case GL_OUT_OF_MEMORY:
+              errorStr = "GL_OUT_OF_MEMORY";
+              break;
+          default:
+              errorStr = "UNRECOGNIZED";
+              break;
+          }
+
+          fprintf(stderr, "(%s:%d) OpenGL error: %s\n", file, line, errorStr);
+      }
     }
+
+    GLuint loadShader(const char* shaderFilename, GLenum shaderType);
+    GLuint loadShaderProgram(const char* vertShaderFilename, const char* fragShaderFilename);
+    GLuint loadShaderProgram(const char* vertShaderFilename,
+                             const char* geomShaderFilename,
+                             const char* fragShaderFilename);
+
+    bool32 initRenderer(SDL_Window* window);
+    void loadTexture(const char* fileName, GLuint textureID);
+    void allocateAndLoadTexture(const char* fileName, GLuint* textureID);
+
+    void loadDefaultShaders();
+    void loadTextRenderer();
+    void updateShaderCameraState(dge::CameraState camera, GLuint shader);
+
+    Vector2 screenToWorldPoint(dge::CameraState camera, Vector2 point);
+    Vector2 worldToScreenPoint(dge::CameraState camera, Vector2 point);
+
+    void drawLine2D(dge::CameraState camera, Vector2 fromLoc, Vector2 toLoc, Vector4 color);
+    void renderString(dge::CameraState camera, const char* string, int length, Vector2 position, float size, Vector4 color);
+    void renderQuad(dge::CameraState camera, Vector2 centre, Vector2 size, float rotation, Vector4 color);
+    void renderSprite(dge::CameraState camera, GLuint textureID, Vector2 position, float rotation, Vector2 size, Vector4 color);
+    void renderSprite(dge::CameraState camera, GLuint textureID, Vector2 position, float rotation, Vector2 size);
 }
-
-GLuint dge_loadShaderProgram(const char* vertShaderFilename, const char* fragShaderFilename);
-
-bool32 dge_initRenderer(SDL_Window* window);
-void dge_loadTexture(const char* fileName, GLuint textureID);
-void dge_allocateAndLoadTexture(const char* fileName, GLuint* textureID);
-
-void dge_loadDefaultShaders();
-void dge_loadTextRenderer();
-void dge_updateShaderCameraState(CameraState camera, GLuint shader);
-
-Vector2 dge_screenToWorldPoint(CameraState camera, Vector2 point);
-Vector2 dge_worldToScreenPoint(CameraState camera, Vector2 point);
-
-void dge_drawLine2D(CameraState camera, Vector2 fromLoc, Vector2 toLoc, Vector4 color);
-void dge_renderString(CameraState camera, const char* string, int length, Vector2 position, float size, Vector4 color);
-void dge_renderQuad(CameraState camera, Vector2 centre, Vector2 size, float rotation, Vector4 color);
-void dge_renderSprite(CameraState camera, GLuint textureID, Vector2 position, float rotation, Vector2 size, Vector4 color);
-void dge_renderSprite(CameraState camera, GLuint textureID, Vector2 position, float rotation, Vector2 size);
 
 #endif

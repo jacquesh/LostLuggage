@@ -31,7 +31,7 @@ struct Conveyer : MapObject
 {
   Direction dir;
   Conveyer(Direction _dir);
-  Vector2I getSpeed();
+  dge::Vector2I getSpeed();
 };
 
 struct Bin : MapObject
@@ -49,7 +49,7 @@ struct Level
   Level(int _width, int _height);
   Level(picojson::value v);
   ~Level();
-  Vector2 getVelocity(Vector2 topLeft, Vector2 bottomRight);
+  dge::Vector2 getVelocity(dge::Vector2 topLeft, dge::Vector2 bottomRight);
   void flipConveyers(int x,int y);
 };
 

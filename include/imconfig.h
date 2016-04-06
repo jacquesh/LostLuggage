@@ -33,12 +33,12 @@
 //---- Define constructor and implicit cast operators to convert back<>forth from your math types and ImVec2/ImVec4.
 
 #define IM_VEC2_CLASS_EXTRA                                                 \
-        ImVec2(const Vector2& f) { x = f.x; y = f.y; }                       \
-        operator Vector2() const { return Vector2(x,y); }
+        ImVec2(const dge::Vector2& f) { x = f.x; y = f.y; }                       \
+        operator dge::Vector2() const { return dge::Vector2(x,y); }
 
 #define IM_VEC4_CLASS_EXTRA                                                 \
-        ImVec4(const Vector4& f) { x = f.x; y = f.y; z = f.z; w = f.w; }     \
-        operator Vector4() const { return Vector4(x,y,z,w); }
+        ImVec4(const dge::Vector4& f) { x = f.x; y = f.y; z = f.z; w = f.w; }     \
+        operator dge::Vector4() const { return dge::Vector4(x,y,z,w); }
 
 
 //---- Tip: You can add extra functions within the ImGui:: namespace, here or in your own headers files.

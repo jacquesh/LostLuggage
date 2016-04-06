@@ -3,21 +3,24 @@
 
 #include "dge.h"
 
-// Random Number Generation
-// From: www.pcg-random.org
-// ========================
-struct RNGState
+namespace dge
 {
-    uint64 state;
-    uint64 inc;
-};
+    // Random Number Generation
+    // From: www.pcg-random.org
+    // ========================
+    struct RNGState
+    {
+        uint64 state;
+        uint64 inc;
+    };
 
-uint32 dge_randint(RNGState* rng);
-uint32 dge_randint(RNGState* rng, uint32 bound);
+    uint32 randint(RNGState* rng);
+    uint32 randint(RNGState* rng, uint32 bound);
 
-float dge_randf(RNGState* rng);
-float dge_randf();
+    float randf(RNGState* rng);
+    float randf();
 
-void dge_seedRNG(RNGState* rng, uint64 initialState, uint64 initialSequence);
+    void seedRNG(RNGState* rng, uint64 initialState, uint64 initialSequence);
+}
 
 #endif

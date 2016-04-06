@@ -13,10 +13,10 @@ extern float grid_size;
 
 struct GameState
 {
-    CameraState camera;
+    dge::CameraState camera;
 
     Level* currentLevel;
-    UnorderedList<Bag*> bagList;
+    dge::UnorderedList<Bag*> bagList;
 
     float timeTillLevelRestart;
 };
