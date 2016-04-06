@@ -13,7 +13,7 @@
 // =============
 // The main DGE API, all you need is to link with a file that implements these functions
 // =============
-void getWindowSettings(WindowData* windowData);
+void getWindowSettings(dge::WindowData* windowData);
 
 void initGame(GameState* game);
 bool updateGame(GameState* game, float deltaTime);
@@ -49,7 +49,7 @@ void cleanupGame(GameState* game);
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
     SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
 
-    WindowData windowData = {};
+    dge::WindowData windowData = {};
     getWindowSettings(&windowData);
     SDL_Window* window = SDL_CreateWindow(windowData.title,
                                          windowData.x, windowData.y,
@@ -64,7 +64,7 @@ void cleanupGame(GameState* game);
         SDL_Quit();
         return 1;
     }
-    if(!dge_initRenderer(window))
+    if(!dge::initRenderer(window))
     {
         SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Initialization Error",
                                  "Unable to create renderer!", 0);
