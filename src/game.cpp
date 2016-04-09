@@ -81,7 +81,7 @@ void loadLevel(GameState* game, const char* filename)
     int bagX;
     int bagY;
     char bagCategory;
-    dge::Vector2 bagSize(grid_size*0.5f, grid_size*0.5f);
+    dge::Vector2 bagSize(0.5f, 0.5f);
     picojson::array luggage = v.get("luggage").get<picojson::array>();
     for(picojson::array::iterator it = luggage.begin();
                                   it != luggage.end();

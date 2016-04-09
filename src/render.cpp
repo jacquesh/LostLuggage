@@ -104,8 +104,9 @@ void renderGame(GameState* game)
     {
         Bag bag = *game->bagList[bagIndex];
         dge::Vector2 position = bag.position * grid_size;
-        dge::renderQuad(game->camera, position, bag.size, 0.0f, red);
-        dge::renderQuad(game->camera, position, bag.size, 0.0f, categoryColours[bag.category]);
+        dge::Vector2 size = bag.size * grid_size;
+        dge::renderQuad(game->camera, position, size, 0.0f, red);
+        dge::renderQuad(game->camera, position, size, 0.0f, categoryColours[bag.category]);
     }
 
 /*    ImVec2 windowLoc(50.0f, 50.0f);
