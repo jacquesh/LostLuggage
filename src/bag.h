@@ -10,7 +10,6 @@ struct Bag
   dge::Vector2 size;
   int category;
   Level* level;
-  float alongLine;
   dge::Vector2I lastPosition;
   dge::Vector2I nextPosition;
   dge::Vector2 velocity;

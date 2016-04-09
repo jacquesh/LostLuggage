@@ -1,7 +1,7 @@
 #include "bag.h"
 
 Bag::Bag(dge::Vector2 _position, dge::Vector2 _size, int _category, Level* _level)
-  : position(_position), size(_size), category(_category), level(_level), alongLine(1)
+  : position(_position), size(_size), category(_category), level(_level)
 {
     lastPosition = dge::Vector2I(position.x,position.y);
     nextPosition = dge::Vector2I(position.x,position.y);
@@ -10,11 +10,12 @@ Bag::Bag(dge::Vector2 _position, dge::Vector2 _size, int _category, Level* _leve
 
 void Bag::updatePosition(float timestep)
 {
-    position = dge::lerp(lastPosition, nextPosition, alongLine);
+    position = dge::slide(position, nextPosition, timestep);
 
-    alongLine += timestep;
-
-    if (alongLine > 1)
+    float xOffset = position.x - nextPosition.x;
+    float yOffset = position.y - nextPosition.y;
+    float offsetDist = xOffset*xOffset + yOffset*yOffset;
+    if(offsetDist < 0.1f*0.1f)
     {
         lastPosition = nextPosition;
         MapObject* currentPositionObj = level->map[nextPosition.y][nextPosition.x];
@@ -27,7 +28,6 @@ void Bag::updatePosition(float timestep)
         {
             nextPosition = lastPosition;
         }
-        alongLine -= 1;
     }
 
 }
