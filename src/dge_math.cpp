@@ -273,6 +273,22 @@ float dge::slide(float from, float to, float maxDistance)
     return result;
 }
 
+dge::Vector2 dge::slide(Vector2 from, Vector2 to, float maxDistance)
+{
+    Vector2 offset = to - from;
+    Vector2 result;
+    if(offset.sqrMagnitude() < maxDistance*maxDistance)
+    {
+        result = to;
+    }
+    else
+    {
+        Vector2 direction = offset.normalized();
+        result = from + direction*maxDistance;
+    }
+    return result;
+}
+
 float dge::slideAngle(float from, float to, float maxDistance)
 {
     float offset = to - from;
