@@ -5,6 +5,7 @@
 #include <math.h>
 #include <stdlib.h>
 
+#define ROOTTWO 1.4142136f
 
 #define PI 3.1415926f
 #define TWOPI 6.2831853f
