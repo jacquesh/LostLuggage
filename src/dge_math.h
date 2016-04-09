@@ -91,6 +91,7 @@ namespace dge
   float slideAngle(float from, float to, float maxDistance);
 
   Vector2 lerp(Vector2 from, Vector2 to, float t);
+  Vector2 slide(Vector2 from, Vector2 to, float maxDistance);
 }
 
 #endif
