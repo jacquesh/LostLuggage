@@ -13,12 +13,12 @@ void Bag::updatePosition(float timestep)
     dge::Vector2I currentLoc(dge::round(position.x), dge::round(position.y));
     MapObject* currentLocObj = level->map[currentLoc.y][currentLoc.x];
     nextPosition = currentLoc;
-    if ((currentLocObj != nullptr) && (currentLocObj->type == MapObjectType::conveyer))
+    if ((currentLocObj != nullptr) && (currentLocObj->type == MapObjectType::CONVEYER))
     {
         dge::Vector2I conveyerMotion = ((Conveyer*)currentLocObj)->getSpeed();
         dge::Vector2I newNextPosition = currentLoc+conveyerMotion;
         MapObject* nextPositionObj = level->map[newNextPosition.x][newNextPosition.y];
-        if((nextPositionObj == nullptr) || (nextPositionObj->type !=MapObjectType::wall))
+        if((nextPositionObj == nullptr) || (nextPositionObj->type !=MapObjectType::WALL))
         {
             nextPosition = newNextPosition;
         }

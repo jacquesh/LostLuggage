@@ -60,38 +60,38 @@ void renderGame(GameState* game)
             dge::Vector2 cellCentre(x*grid_size, y*grid_size);
             switch(mapObj->type)
             {
-                case MapObjectType::conveyer:
+                case MapObjectType::CONVEYER:
                 {
                     Conveyer* conv = (Conveyer*)mapObj;
                     dge::renderQuad(game->camera, cellCentre, cellSize, 0.0f, white);
                     const char* dirChar = "";
                     switch(conv->dir)
                     {
-                        case Direction::left: dirChar = "<"; break;
-                        case Direction::right: dirChar = ">"; break;
-                        case Direction::up: dirChar = "^"; break;
-                        case Direction::down: dirChar = "v"; break;
+                        case Direction::LEFT: dirChar = "<"; break;
+                        case Direction::RIGHT: dirChar = ">"; break;
+                        case Direction::UP: dirChar = "^"; break;
+                        case Direction::DOWN: dirChar = "v"; break;
                         default: dirChar = "x";
                     }
                     dge::renderString(game->camera, dirChar, 1, cellCentre, grid_size/2.0f, white);
                 } break;
 
-                case MapObjectType::bin:
+                case MapObjectType::BIN:
                 {
                     Bin* bin = (Bin*)mapObj;
                     dge::renderQuad(game->camera, cellCentre, cellSize, 0.0f, white);
                     dge::renderQuad(game->camera, cellCentre, cellSize*0.8f, 0.0f, categoryColours[bin->category]);
                 } break;
 
-                case MapObjectType::wall:
+                case MapObjectType::WALL:
                 {
                     Wall* wall = (Wall*)mapObj;
                     switch (wall->dir)
                     {
-                      case Direction::up    : dge::renderQuad(game->camera, cellCentre+dge::Vector2(0,0.3*grid_size), cellSize*dge::Vector2(0.6f,0.2f), 0.0f, dge::Vector4 (0.5f,0.f,0.f,1.f)); break;
-                      case Direction::down  : dge::renderQuad(game->camera, cellCentre+dge::Vector2(0,-0.3*grid_size), cellSize*dge::Vector2(0.6f,0.2f), 0.0f, dge::Vector4 (0.5f,0.f,0.f,1.f)); break;
-                      case Direction::left  : dge::renderQuad(game->camera, cellCentre+dge::Vector2(-0.3*grid_size,0), cellSize*dge::Vector2(0.2f,0.6f), 0.0f, dge::Vector4 (0.5f,0.f,0.f,1.f)); break;
-                      case Direction::right : dge::renderQuad(game->camera, cellCentre+dge::Vector2(0.3*grid_size,0), cellSize*dge::Vector2(0.2f,0.6f), 0.0f, dge::Vector4 (0.5f,0.f,0.f,1.f)); break;
+                      case Direction::UP    : dge::renderQuad(game->camera, cellCentre+dge::Vector2(0,0.3*grid_size), cellSize*dge::Vector2(0.6f,0.2f), 0.0f, dge::Vector4 (0.5f,0.f,0.f,1.f)); break;
+                      case Direction::DOWN  : dge::renderQuad(game->camera, cellCentre+dge::Vector2(0,-0.3*grid_size), cellSize*dge::Vector2(0.6f,0.2f), 0.0f, dge::Vector4 (0.5f,0.f,0.f,1.f)); break;
+                      case Direction::LEFT  : dge::renderQuad(game->camera, cellCentre+dge::Vector2(-0.3*grid_size,0), cellSize*dge::Vector2(0.2f,0.6f), 0.0f, dge::Vector4 (0.5f,0.f,0.f,1.f)); break;
+                      case Direction::RIGHT : dge::renderQuad(game->camera, cellCentre+dge::Vector2(0.3*grid_size,0), cellSize*dge::Vector2(0.2f,0.6f), 0.0f, dge::Vector4 (0.5f,0.f,0.f,1.f)); break;
                       default:;
                     }
                 } break;

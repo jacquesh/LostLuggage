@@ -13,20 +13,20 @@ int twodfind(int** parents, int a, int b, int width)
 Conveyer::Conveyer(Direction _dir)
     : dir(_dir)
 {
-    type = MapObjectType::conveyer;
+    type = MapObjectType::CONVEYER;
 }
 
 dge::Vector2I Conveyer::getSpeed()
 {
     switch(dir)
     {
-        case up:
+        case UP:
             return dge::Vector2I(0,1);
-        case down:
+        case DOWN:
             return dge::Vector2I(0,-1);
-        case left:
+        case LEFT:
             return dge::Vector2I(-1,0);
-        case right:
+        case RIGHT:
             return dge::Vector2I(1,0);
         default:
             return dge::Vector2I(0,0);
@@ -36,13 +36,13 @@ dge::Vector2I Conveyer::getSpeed()
 Wall::Wall(Direction _dir)
     : dir(_dir)
 {
-    type = MapObjectType::wall;
+    type = MapObjectType::WALL;
 }
 
 Bin::Bin(int _cat)
     :  category(_cat)
 {
-    type = MapObjectType::bin;
+    type = MapObjectType::BIN;
 }
 
 Level::Level(int _width, int _height)
@@ -90,16 +90,16 @@ Level::Level(picojson::value v)
                 case '.':
                     break;
                 case '^':
-                    map[i][j] = new Conveyer(up);
+                    map[i][j] = new Conveyer(UP);
                     break;
                 case '>':
-                    map[i][j] = new Conveyer(right);
+                    map[i][j] = new Conveyer(RIGHT);
                     break;
                 case '<':
-                    map[i][j] = new Conveyer(left);
+                    map[i][j] = new Conveyer(LEFT);
                     break;
                 case 'v':
-                    map[i][j] = new Conveyer(down);
+                    map[i][j] = new Conveyer(DOWN);
                     break;
                 default:
                     break;
@@ -111,7 +111,7 @@ Level::Level(picojson::value v)
         for (int j = 0; j<width; j++)
         {
             MapObject* obj = map[i][j];
-            if((obj == nullptr) || (obj->type != MapObjectType::conveyer))
+            if((obj == nullptr) || (obj->type != MapObjectType::CONVEYER))
                 continue;
             Conveyer* objConveyer = (Conveyer*)obj;
 
@@ -120,7 +120,7 @@ Level::Level(picojson::value v)
                 if ((i+di > 0) && (i+di < height))
                 {
                     MapObject* nextObj = map[i+di][j];
-                    if((nextObj != nullptr) && (nextObj->type == MapObjectType::conveyer))
+                    if((nextObj != nullptr) && (nextObj->type == MapObjectType::CONVEYER))
                     {
                         Conveyer* nextObjConveyer = (Conveyer*)nextObj;
                         if (objConveyer->dir == nextObjConveyer->dir)
@@ -135,7 +135,7 @@ Level::Level(picojson::value v)
                 if ((j + dj > 0) && (j + dj < width))
                 {
                     MapObject* nextObj = map[i][j+dj];
-                    if((nextObj != nullptr) && (nextObj->type == MapObjectType::conveyer))
+                    if((nextObj != nullptr) && (nextObj->type == MapObjectType::CONVEYER))
                     {
                         Conveyer* nextObjConveyer = (Conveyer*)nextObj;
                         if (objConveyer->dir == nextObjConveyer->dir)
@@ -160,10 +160,10 @@ Level::Level(picojson::value v)
         Direction dir;
         switch (d)
         {
-            case 'u': dir = up; break;
-            case 'd': dir = down; break;
-            case 'l': dir = left; break;
-            default: dir = right; break;
+            case 'u': dir = UP; break;
+            case 'd': dir = DOWN; break;
+            case 'l': dir = LEFT; break;
+            default: dir = RIGHT; break;
         }
         map[y-1][x-1] = new Wall(dir);
     }
@@ -176,7 +176,7 @@ void Level::flipConveyers(int x, int y)
         for (int j = 0; j<width; j++)
         {
             MapObject* obj = map[i][j];
-            if ((obj == nullptr) || (obj->type != MapObjectType::conveyer))
+            if ((obj == nullptr) || (obj->type != MapObjectType::CONVEYER))
                 continue;
             Conveyer* objConveyer = (Conveyer*)obj;
 
@@ -184,17 +184,17 @@ void Level::flipConveyers(int x, int y)
             {
                 switch (objConveyer->dir)
                 {
-                    case up:
-                        objConveyer->dir = down;
+                    case UP:
+                        objConveyer->dir = DOWN;
                         break;
-                    case down:
-                        objConveyer->dir = up;
+                    case DOWN:
+                        objConveyer->dir = UP;
                         break;
-                    case right:
-                        objConveyer->dir = left;
+                    case RIGHT:
+                        objConveyer->dir = LEFT;
                         break;
-                    case left:
-                        objConveyer->dir = right;
+                    case LEFT:
+                        objConveyer->dir = RIGHT;
                         break;
                 }
             }

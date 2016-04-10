@@ -126,7 +126,7 @@ bool updateGame(GameState* game, float deltaTime)
         game->bagList[i]->updatePosition(deltaTime);
         dge::Vector2I lastLoc = game->bagList[i]->lastPosition;
         MapObject* lastLocObj = game->currentLevel->map[lastLoc.y][lastLoc.x];
-        if(!lastLocObj || (lastLocObj->type == MapObjectType::bin))
+        if(!lastLocObj || (lastLocObj->type == MapObjectType::BIN))
         {
             activeBagCount -= 1;
         }

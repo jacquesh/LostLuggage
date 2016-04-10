@@ -10,17 +10,17 @@
 
 enum Direction
 {
-    up,
-    left,
-    right,
-    down
+    UP,
+    LEFT,
+    RIGHT,
+    DOWN
 };
 
 enum MapObjectType
 {
-    conveyer,
-    bin,
-    wall
+    CONVEYER,
+    BIN,
+    WALL
 };
 
 struct MapObject
