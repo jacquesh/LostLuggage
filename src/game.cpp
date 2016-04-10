@@ -146,7 +146,7 @@ bool updateGame(GameState* game, float deltaTime)
         return keepRunning;
     }
 
-    int activeBagCount = 0;
+    int activeBagCount = game->bagList.size();
     int correctBagCount = 0;
     for (int i = 0; i< game->bagList.size(); ++i)
     {
@@ -156,11 +156,11 @@ bool updateGame(GameState* game, float deltaTime)
         MapObject* lastLocObj = game->currentLevel->map[lastLoc.y][lastLoc.x];
         if(!lastLocObj)
         {
-            activeBagCount += 1;
+            activeBagCount -= 1;
         }
         else if(lastLocObj->type == MapObjectType::BIN)
         {
-            activeBagCount += 1;
+            activeBagCount -= 1;
             Bin* bin = (Bin*)lastLocObj;
             if(bin->category == bag->category)
             {
@@ -169,13 +169,18 @@ bool updateGame(GameState* game, float deltaTime)
         }
     }
 
-    if(activeBagCount == game->bagList.size())
+    if((activeBagCount+correctBagCount) < game->bagList.size())
     {
+        // If the 2 counts don't add up to exactly the number of bags then we've dropped one,
+        // either on the floor or in the incorrect bin, so the player loses
         game->timeTillLevelLoad = 1.0f;
-        if(correctBagCount == game->bagList.size())
-        {
-            game->currentLevelIndex = (game->currentLevelIndex+1) % game->levelFileList.size();
-        }
+    }
+    else if(correctBagCount == game->bagList.size())
+    {
+        // If the 2 counts DO add up to the number of bags and they're all correct,
+        // then the player wins!
+        game->currentLevelIndex = (game->currentLevelIndex+1) % game->levelFileList.size();
+        game->timeTillLevelLoad = 1.0f;
     }
 
     return keepRunning;
