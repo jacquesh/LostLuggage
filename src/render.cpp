@@ -49,6 +49,7 @@ void renderGame(GameState* game)
 
     dge::Vector2 cellSize(grid_size, grid_size);
     dge::Vector4 white(1.0f, 1.0f, 1.0f, 1.0f);
+    dge::Vector4 maroon = dge::Vector4 (0.5f,0.f,0.f,1.f);
     for(int y=0; y<game->currentLevel->height; ++y)
     {
         for(int x=0; x<game->currentLevel->width; ++x)
@@ -86,14 +87,35 @@ void renderGame(GameState* game)
                 case MapObjectType::WALL:
                 {
                     Wall* wall = (Wall*)mapObj;
+                    dge::Vector2 quadLoc(cellCentre);
+                    dge::Vector2 quadSize;
                     switch (wall->dir)
                     {
-                      case Direction::UP    : dge::renderQuad(game->camera, cellCentre+dge::Vector2(0,0.3*grid_size), cellSize*dge::Vector2(0.6f,0.2f), 0.0f, dge::Vector4 (0.5f,0.f,0.f,1.f)); break;
-                      case Direction::DOWN  : dge::renderQuad(game->camera, cellCentre+dge::Vector2(0,-0.3*grid_size), cellSize*dge::Vector2(0.6f,0.2f), 0.0f, dge::Vector4 (0.5f,0.f,0.f,1.f)); break;
-                      case Direction::LEFT  : dge::renderQuad(game->camera, cellCentre+dge::Vector2(-0.3*grid_size,0), cellSize*dge::Vector2(0.2f,0.6f), 0.0f, dge::Vector4 (0.5f,0.f,0.f,1.f)); break;
-                      case Direction::RIGHT : dge::renderQuad(game->camera, cellCentre+dge::Vector2(0.3*grid_size,0), cellSize*dge::Vector2(0.2f,0.6f), 0.0f, dge::Vector4 (0.5f,0.f,0.f,1.f)); break;
-                      default:;
+                        case Direction::UP:
+                        {
+                            quadLoc += dge::Vector2(0.0f,0.3f*grid_size);
+                            quadSize = dge::Vector2(0.6f, 0.2f);
+                        } break;
+                        case Direction::DOWN:
+                        {
+                            quadLoc += dge::Vector2(0.0f,-0.3f*grid_size);
+                            quadSize = dge::Vector2(0.6f, 0.2f);
+                        } break;
+                        case Direction::LEFT:
+                        {
+                            quadLoc += dge::Vector2(-0.3f*grid_size,0.0f);
+                            quadSize = dge::Vector2(0.2f, 0.6f);
+                        } break;
+                        case Direction::RIGHT:
+                        {
+                            quadLoc += dge::Vector2(0.3f*grid_size,0.0f);
+                            quadSize = dge::Vector2(0.2f, 0.6f);
+                        } break;
+                        default:
+                        {
+                        } break;
                     }
+                    dge::renderQuad(game->camera, quadLoc, cellSize*quadSize, 0.0f, maroon);
                 } break;
             }
         }
