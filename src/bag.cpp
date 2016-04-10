@@ -1,7 +1,7 @@
 #include "bag.h"
 
 Bag::Bag(dge::Vector2 _position, dge::Vector2 _size, int _category, Level* _level)
-  : position(_position), size(_size), category(_category), level(_level)
+    : position(_position), size(_size), category(_category), level(_level)
 {
     lastPosition = dge::Vector2I(position.x,position.y);
     nextPosition = dge::Vector2I(position.x,position.y);

@@ -11,30 +11,30 @@ int twodfind(int** parents, int a, int b, int width)
 }
 
 Conveyer::Conveyer(Direction _dir)
-  : dir(_dir)
+    : dir(_dir)
 {
     type = MapObjectType::conveyer;
 }
 
 dge::Vector2I Conveyer::getSpeed()
 {
-  switch(dir)
-  {
-    case up:
-      return dge::Vector2I(0,1);
-    case down:
-      return dge::Vector2I(0,-1);
-    case left:
-      return dge::Vector2I(-1,0);
-    case right:
-      return dge::Vector2I(1,0);
-    default:
-      return dge::Vector2I(0,0);
-  }
+    switch(dir)
+    {
+        case up:
+            return dge::Vector2I(0,1);
+        case down:
+            return dge::Vector2I(0,-1);
+        case left:
+            return dge::Vector2I(-1,0);
+        case right:
+            return dge::Vector2I(1,0);
+        default:
+            return dge::Vector2I(0,0);
+    }
 }
 
 Wall::Wall(Direction _dir)
-  : dir(_dir)
+    : dir(_dir)
 {
     type = MapObjectType::wall;
 }
@@ -46,66 +46,66 @@ Bin::Bin(int _cat)
 }
 
 Level::Level(int _width, int _height)
-  : width(_width) , height(_height)
+    : width(_width) , height(_height)
 {
-  map = new MapObject** [height];
-  conveyerParent = new int* [height];
-  for (int i = 0; i<height; i++)
-  {
-    map[i] = new MapObject* [width];
-    conveyerParent[i] = new int [width];
-    for (int j = 0; j<width; j++)
+    map = new MapObject** [height];
+    conveyerParent = new int* [height];
+    for (int i = 0; i<height; i++)
     {
-      map[i][j] = nullptr;
-      conveyerParent[i][j] = i * width + j;
+        map[i] = new MapObject* [width];
+        conveyerParent[i] = new int [width];
+        for (int j = 0; j<width; j++)
+        {
+            map[i][j] = nullptr;
+            conveyerParent[i][j] = i * width + j;
+        }
     }
-  }
 }
 
 Level::Level(picojson::value v)
 {
     height = dge::round(v.get("size").get<picojson::array>()[0].get<double>());
     width  = dge::round(v.get("size").get<picojson::array>()[1].get<double>());
-  map = new MapObject** [height];
-  conveyerParent = new int* [height];
+    map = new MapObject** [height];
+    conveyerParent = new int* [height];
 
-  for (int i = height-1; i>=0; i--)
-  {
-    std::stringstream sin(v.get("map").get<picojson::array>()[height-i-1].to_str());
-    map[i] = new MapObject* [width];
-    conveyerParent[i] = new int [width];
-    for (int j = 0; j<width; j++)
+    for (int i = height-1; i>=0; i--)
     {
-      map[i][j] = nullptr;
-      conveyerParent[i][j] = i * width + j;
-      char v;
-      sin>>v;
-      if((v >= 'A') && (v <= 'Z'))
-      {
-        int binCategory = v - 'A';
-        map[i][j] = new Bin(binCategory);
-      }
-      switch (v)
-      {
-        case '.':
-          break;
-        case '^':
-          map[i][j] = new Conveyer(up);
-          break;
-        case '>':
-          map[i][j] = new Conveyer(right);
-          break;
-        case '<':
-          map[i][j] = new Conveyer(left);
-          break;
-        case 'v':
-          map[i][j] = new Conveyer(down);
-          break;
-        default:
-          break;
-      }
+        std::stringstream sin(v.get("map").get<picojson::array>()[height-i-1].to_str());
+        map[i] = new MapObject* [width];
+        conveyerParent[i] = new int [width];
+        for (int j = 0; j<width; j++)
+        {
+            map[i][j] = nullptr;
+            conveyerParent[i][j] = i * width + j;
+            char v;
+            sin>>v;
+            if((v >= 'A') && (v <= 'Z'))
+            {
+                int binCategory = v - 'A';
+                map[i][j] = new Bin(binCategory);
+            }
+            switch (v)
+            {
+                case '.':
+                    break;
+                case '^':
+                    map[i][j] = new Conveyer(up);
+                    break;
+                case '>':
+                    map[i][j] = new Conveyer(right);
+                    break;
+                case '<':
+                    map[i][j] = new Conveyer(left);
+                    break;
+                case 'v':
+                    map[i][j] = new Conveyer(down);
+                    break;
+                default:
+                    break;
+            }
+        }
     }
-  }
     for (int i = 0; i<height; i++)
     {
         for (int j = 0; j<width; j++)
@@ -149,23 +149,23 @@ Level::Level(picojson::value v)
     }
     for (int i = 0; i<height; i++)
         for (int j = 0; j<width; j++)
-          twodfind(conveyerParent,i,j,width);
+            twodfind(conveyerParent,i,j,width);
     for(picojson::array::iterator it = v.get("walls").get<picojson::array>().begin();
-                                  it != v.get("walls").get<picojson::array>().end();
-                                  ++it)
+            it != v.get("walls").get<picojson::array>().end();
+            ++it)
     {
-      int x = int((*it).get<picojson::array>()[0].get<double>());
-      int y = int((*it).get<picojson::array>()[1].get<double>());
-      int d = (*it).get<picojson::array>()[2].to_str()[0];
-      Direction dir;
-      switch (d)
-      {
-        case 'u': dir = up; break;
-        case 'd': dir = down; break;
-        case 'l': dir = left; break;
-        default: dir = right; break;
-      }
-      map[y-1][x-1] = new Wall(dir);
+        int x = int((*it).get<picojson::array>()[0].get<double>());
+        int y = int((*it).get<picojson::array>()[1].get<double>());
+        int d = (*it).get<picojson::array>()[2].to_str()[0];
+        Direction dir;
+        switch (d)
+        {
+            case 'u': dir = up; break;
+            case 'd': dir = down; break;
+            case 'l': dir = left; break;
+            default: dir = right; break;
+        }
+        map[y-1][x-1] = new Wall(dir);
     }
 }
 
@@ -203,11 +203,11 @@ void Level::flipConveyers(int x, int y)
 
 Level::~Level()
 {
-  for (int i = 0; i<height; i++)
-  {
-    for (int j = 0; j<width; j++)
-      if (map[i][j] != nullptr)
-        delete map[i][j];
-    delete[] map[i];
-  }
+    for (int i = 0; i<height; i++)
+    {
+        for (int j = 0; j<width; j++)
+            if (map[i][j] != nullptr)
+                delete map[i][j];
+        delete[] map[i];
+    }
 }

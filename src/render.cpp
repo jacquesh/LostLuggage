@@ -33,15 +33,15 @@ void loadRenderData()
 }
 
 static dge::Vector4 categoryColours[9] = {dge::Vector4(0.0f, 0.0f, 1.0f, 1.0f),
-                                     dge::Vector4(0.0f, 1.0f, 0.0f, 1.0f),
-                                     dge::Vector4(0.0f, 1.0f, 1.0f, 1.0f),
-                                     dge::Vector4(1.0f, 0.0f, 0.0f, 1.0f),
-                                     dge::Vector4(1.0f, 0.0f, 1.0f, 1.0f),
-                                     dge::Vector4(1.0f, 1.0f, 0.0f, 1.0f),
-                                     dge::Vector4(1.0f, 1.0f, 1.0f, 1.0f),
-                                     dge::Vector4(0.0f, 0.0f, 0.0f, 1.0f),
-                                     dge::Vector4(0.5f, 0.5f, 0.5f, 1.0f),
-                                    };
+                                          dge::Vector4(0.0f, 1.0f, 0.0f, 1.0f),
+                                          dge::Vector4(0.0f, 1.0f, 1.0f, 1.0f),
+                                          dge::Vector4(1.0f, 0.0f, 0.0f, 1.0f),
+                                          dge::Vector4(1.0f, 0.0f, 1.0f, 1.0f),
+                                          dge::Vector4(1.0f, 1.0f, 0.0f, 1.0f),
+                                          dge::Vector4(1.0f, 1.0f, 1.0f, 1.0f),
+                                          dge::Vector4(0.0f, 0.0f, 0.0f, 1.0f),
+                                          dge::Vector4(0.5f, 0.5f, 0.5f, 1.0f),
+                                         };
 
 void renderGame(GameState* game)
 {

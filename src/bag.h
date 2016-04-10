@@ -6,15 +6,15 @@
 
 struct Bag
 {
-  dge::Vector2 position;
-  dge::Vector2 size;
-  int category;
-  Level* level;
-  dge::Vector2I lastPosition;
-  dge::Vector2I nextPosition;
-  dge::Vector2 velocity;
-  Bag(dge::Vector2 _position, dge::Vector2 _size, int _category, Level* _level);
-  void updatePosition(float timestep);
+    dge::Vector2 position;
+    dge::Vector2 size;
+    int category;
+    Level* level;
+    dge::Vector2I lastPosition;
+    dge::Vector2I nextPosition;
+    dge::Vector2 velocity;
+    Bag(dge::Vector2 _position, dge::Vector2 _size, int _category, Level* _level);
+    void updatePosition(float timestep);
 };
 
 #endif
