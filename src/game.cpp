@@ -2,6 +2,8 @@
 #include <SDL.h>
 
 #include <stdio.h>
+#include <string.h>
+#include <dirent.h>
 #include <fstream>
 #include <algorithm>
 
@@ -59,7 +61,7 @@ bool handleInput(GameState* game)
     return keepRunning;
 }
 
-void loadLevel(GameState* game, const char* filename)
+void loadCurrentLevel(GameState* game)
 {
     if(game->currentLevel)
     {
@@ -67,6 +69,7 @@ void loadLevel(GameState* game, const char* filename)
         game->bagList.pointerClear();
     }
 
+    char* filename = game->levelFileList[game->currentLevelIndex];
     std::fstream fin(filename, std::fstream::in);
     picojson::value v;
     std::string err;
@@ -102,40 +105,77 @@ void initGame(GameState* game)
 
     game->camera.position = dge::Vector2(-grid_size, -grid_size);
     game->camera.size = dge::Vector2(640.0f, 480.f);
-    game->timeTillLevelRestart = 0.0f;
+    game->timeTillLevelLoad = 0.0f;
 
-    loadLevel(game, "resources/levels/level0.json");
+    const char* resourceDir = "resources/levels/";
+    size_t resourceDirLen = strlen(resourceDir);
+    DIR* levelDir = opendir(resourceDir);
+    if(levelDir)
+    {
+        dirent* entry;
+        while(entry = readdir(levelDir))
+        {
+            if(entry->d_type != DT_REG)
+                continue;
+            size_t filenameLength = entry->d_namlen;
+            char* filename = new char[resourceDirLen+filenameLength+1];
+            strcpy(filename, resourceDir);
+            strcpy(filename + resourceDirLen, entry->d_name);
+            game->levelFileList.insert(filename);
+        }
+    }
+    closedir(levelDir);
+    for(int i=0; i<game->levelFileList.size(); ++i)
+    {
+        debug("%s", game->levelFileList[i]);
+    }
+
+    loadCurrentLevel(game);
 }
 
 bool updateGame(GameState* game, float deltaTime)
 {
     bool keepRunning = handleInput(game);
-    if(game->timeTillLevelRestart > 0.0f)
+    if(game->timeTillLevelLoad > 0.0f)
     {
-        game->timeTillLevelRestart -= deltaTime;
-        if(game->timeTillLevelRestart <= 0.0f)
+        game->timeTillLevelLoad -= deltaTime;
+        if(game->timeTillLevelLoad <= 0.0f)
         {
-            loadLevel(game, "resources/levels/level0.json");
+            loadCurrentLevel(game);
         }
         return keepRunning;
     }
 
-    int activeBagCount = game->bagList.size();
+    int activeBagCount = 0;
+    int correctBagCount = 0;
     for (int i = 0; i< game->bagList.size(); ++i)
     {
-        game->bagList[i]->updatePosition(deltaTime);
-        dge::Vector2I lastLoc = game->bagList[i]->lastPosition;
+        Bag* bag = game->bagList[i];
+        bag->updatePosition(deltaTime);
+        dge::Vector2I lastLoc = bag->lastPosition;
         MapObject* lastLocObj = game->currentLevel->map[lastLoc.y][lastLoc.x];
-        if(!lastLocObj || (lastLocObj->type == MapObjectType::BIN))
+        if(!lastLocObj)
         {
-            activeBagCount -= 1;
+            activeBagCount += 1;
+        }
+        else if(lastLocObj->type == MapObjectType::BIN)
+        {
+            activeBagCount += 1;
+            Bin* bin = (Bin*)lastLocObj;
+            if(bin->category == bag->category)
+            {
+                correctBagCount += 1;
+            }
         }
     }
 
-    if(activeBagCount <= 0)
+    if(activeBagCount == game->bagList.size())
     {
-        game->timeTillLevelRestart = 1.0f;
-        // TODO: Game over (did we win? Nobody knows...its a MYSTERY!)
+        game->timeTillLevelLoad = 1.0f;
+        if(correctBagCount == game->bagList.size())
+        {
+            game->currentLevelIndex = (game->currentLevelIndex+1) % game->levelFileList.size();
+        }
     }
 
     return keepRunning;

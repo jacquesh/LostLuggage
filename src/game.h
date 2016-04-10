@@ -15,10 +15,12 @@ struct GameState
 {
     dge::CameraState camera;
 
+    dge::UnorderedList<char*> levelFileList;
+    int currentLevelIndex;
     Level* currentLevel;
     dge::UnorderedList<Bag*> bagList;
 
-    float timeTillLevelRestart;
+    float timeTillLevelLoad;
 };
 
 #endif
