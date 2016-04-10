@@ -25,11 +25,11 @@ void loadRenderData()
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
     dge::loadDefaultShaders();
     dge::loadTextRenderer();
-    dge::allocateAndLoadTexture("resources/cursor.png", &cursorTexture);
+    dge::allocateAndLoadTexture("resources/gfx/cursor.png", &cursorTexture);
 
-    dge::allocateAndLoadTexture("resources/tower.png", &towerTexture);
-    dge::allocateAndLoadTexture("resources/pixel.png", &pixelTexture);
-    dge::allocateAndLoadTexture("resources/enemy.png", &enemyTexture);
+    dge::allocateAndLoadTexture("resources/gfx/tower.png", &towerTexture);
+    dge::allocateAndLoadTexture("resources/gfx/pixel.png", &pixelTexture);
+    dge::allocateAndLoadTexture("resources/gfx/enemy.png", &enemyTexture);
 }
 
 static dge::Vector4 categoryColours[9] = {dge::Vector4(0.0f, 0.0f, 1.0f, 1.0f),

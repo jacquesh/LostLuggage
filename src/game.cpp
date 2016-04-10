@@ -104,7 +104,7 @@ void initGame(GameState* game)
     game->camera.size = dge::Vector2(640.0f, 480.f);
     game->timeTillLevelRestart = 0.0f;
 
-    loadLevel(game, "resources/level0.json");
+    loadLevel(game, "resources/levels/level0.json");
 }
 
 bool updateGame(GameState* game, float deltaTime)
@@ -115,7 +115,7 @@ bool updateGame(GameState* game, float deltaTime)
         game->timeTillLevelRestart -= deltaTime;
         if(game->timeTillLevelRestart <= 0.0f)
         {
-            loadLevel(game, "resources/level0.json");
+            loadLevel(game, "resources/levels/level0.json");
         }
         return keepRunning;
     }

@@ -1,10 +1,7 @@
 # Project Structure
 build/
 lib/
-resources/*
-!resources/*.vsh
-!resources/*.fsh
-!resources/*.json
+resources/gfx/*
 
 # Vim Metafiles
 *.swp

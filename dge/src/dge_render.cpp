@@ -218,12 +218,12 @@ void dge::allocateAndLoadTexture(const char* fileName, GLuint* textureID)
 
 void dge::loadTextRenderer()
 {
-    textShader = dge::loadShaderProgram("resources/sprite.vsh",
-                                       "resources/sprite.fsh");
+    textShader = dge::loadShaderProgram("resources/shaders/sprite.vsh",
+                                        "resources/shaders/sprite.fsh");
     GLint positionLoc = glGetAttribLocation(textShader, "position");
 
     glGenTextures(1, &textTexture);
-    dge::loadTexture("resources/font.png", textTexture);
+    dge::loadTexture("resources/gfx/font.png", textTexture);
 
     glGenVertexArrays(1, &textVAO);
     glGenBuffers(1, &textUVBuffer);
@@ -256,20 +256,20 @@ void dge::loadDefaultShaders()
     // Load shaders
     // Line Shader
     glGenVertexArrays(1, &lineVAO);
-    lineShader = dge::loadShaderProgram("resources/line.vsh",
-                                       "resources/line.fsh");
+    lineShader = dge::loadShaderProgram("resources/shaders/line.vsh",
+                                        "resources/shaders/line.fsh");
     glGenBuffers(1, &lineLocBuffer);
 
     // Sprite Shader
     glGenVertexArrays(1, &spriteVAO);
-    spriteShader = dge::loadShaderProgram("resources/sprite.vsh",
-                                         "resources/sprite.fsh");
+    spriteShader = dge::loadShaderProgram("resources/shaders/sprite.vsh",
+                                          "resources/shaders/sprite.fsh");
     GLint spritePositionLoc = glGetAttribLocation(spriteShader, "position");
     GLint spriteTexCoordLoc = glGetAttribLocation(spriteShader, "texCoord");
 
     // Flat Color Shader
-    flatColorShader = dge::loadShaderProgram("resources/flatColor.vsh",
-                                            "resources/flatColor.fsh");
+    flatColorShader = dge::loadShaderProgram("resources/shaders/flatColor.vsh",
+                                             "resources/shaders/flatColor.fsh");
     // TODO: We don't need to set properties here because both spriteShader and flatColorShader have
     //       position (the only shared attribute) at location 0 (hard-specified in the shader file)
 
