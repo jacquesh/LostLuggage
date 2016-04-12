@@ -45,6 +45,13 @@ Bin::Bin(int _cat)
     type = MapObjectType::BIN;
 }
 
+Bumper::Bumper(Direction _dir)
+    : dir(_dir)
+{
+    type = MapObjectType::BUMPER;
+    active = true;
+}
+
 Level::Level(int _width, int _height)
     : width(_width) , height(_height)
 {
@@ -166,6 +173,24 @@ Level::Level(picojson::value v)
             default: dir = RIGHT; break;
         }
         map[y-1][x-1] = new Wall(dir);
+    }
+
+    for(picojson::array::iterator it = v.get("bumpers").get<picojson::array>().begin();
+            it != v.get("bumpers").get<picojson::array>().end();
+            ++it)
+    {
+        int x = int((*it).get<picojson::array>()[0].get<double>());
+        int y = int((*it).get<picojson::array>()[1].get<double>());
+        char d = (*it).get<picojson::array>()[2].to_str()[0];
+        Direction dir;
+        switch(d)
+        {
+            case 'u': dir = UP; break;
+            case 'd': dir = DOWN; break;
+            case 'l': dir = DOWN; break;
+            default: dir = RIGHT; break;
+        }
+        map[y-1][x-1] = new Bumper(dir);
     }
 }
 

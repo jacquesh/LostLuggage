@@ -50,6 +50,7 @@ void renderGame(GameState* game)
     dge::Vector2 cellSize(grid_size, grid_size);
     dge::Vector4 white(1.0f, 1.0f, 1.0f, 1.0f);
     dge::Vector4 maroon = dge::Vector4 (0.5f,0.f,0.f,1.f);
+    dge::Vector4 grey(0.4f, 0.4f, 0.4f, 1.0f);
     for(int y=0; y<game->currentLevel->height; ++y)
     {
         for(int x=0; x<game->currentLevel->width; ++x)
@@ -116,6 +117,12 @@ void renderGame(GameState* game)
                         } break;
                     }
                     dge::renderQuad(game->camera, quadLoc, cellSize*quadSize, 0.0f, maroon);
+                } break;
+
+                case MapObjectType::BUMPER:
+                {
+                    Bumper* bumper = (Bumper*)mapObj;
+                    dge::renderQuad(game->camera, cellCentre, cellSize*0.8f, 0.0f, grey);
                 } break;
             }
         }

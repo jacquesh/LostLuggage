@@ -20,7 +20,8 @@ enum MapObjectType
 {
     CONVEYER,
     BIN,
-    WALL
+    WALL,
+    BUMPER
 };
 
 struct MapObject
@@ -45,6 +46,13 @@ struct Wall : MapObject
 {
     Direction dir;
     Wall(Direction _dir);
+};
+
+struct Bumper : MapObject
+{
+    Direction dir;
+    bool active;
+    Bumper(Direction _dir);
 };
 
 struct Level
