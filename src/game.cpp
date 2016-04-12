@@ -117,6 +117,8 @@ void initGame(GameState* game)
         {
             if(entry->d_type != DT_REG)
                 continue;
+            if(entry->d_name[0] == '.')
+                continue;
             size_t filenameLength = entry->d_namlen;
             char* filename = new char[resourceDirLen+filenameLength+1];
             strcpy(filename, resourceDir);
