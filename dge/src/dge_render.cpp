@@ -32,6 +32,7 @@ GLuint texCoordBuffer;
 
 // TODO: Building with emscripten
 // TODO: Some interesting notes: https://hero.handmadedev.org/forum/code-discussion/916-opengl-renderer-questions
+// TODO: More reading ("buffer orphaning"?): https://www.reddit.com/r/gamedev/comments/3y1va8/sdl2_c_tile_map_most_efficient_way_to_render_lots/
 
 GLuint dge::loadShader(const char* shaderFilename, GLenum shaderType)
 {
