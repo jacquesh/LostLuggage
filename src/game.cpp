@@ -69,7 +69,7 @@ void loadCurrentLevel(GameState* game)
         game->bagList.pointerClear();
     }
 
-    char* filename = game->levelFileList[game->currentLevelIndex];
+    const char* filename = game->levelFileList[game->currentLevelIndex].c_str();
     std::fstream fin(filename, std::fstream::in);
     picojson::value v;
     std::string err;
@@ -107,9 +107,8 @@ void initGame(GameState* game)
     game->camera.size = dge::Vector2(640.0f, 480.f);
     game->timeTillLevelLoad = 0.0f;
 
-    const char* resourceDir = "resources/levels/";
-    size_t resourceDirLen = strlen(resourceDir);
-    DIR* levelDir = opendir(resourceDir);
+    std::string resourceDir = "resources/levels/";
+    DIR* levelDir = opendir(resourceDir.c_str());
     if(levelDir)
     {
         dirent* entry;
@@ -117,17 +116,14 @@ void initGame(GameState* game)
         {
             if(entry->d_type != DT_REG)
                 continue;
-            size_t filenameLength = entry->d_namlen;
-            char* filename = new char[resourceDirLen+filenameLength+1];
-            strcpy(filename, resourceDir);
-            strcpy(filename + resourceDirLen, entry->d_name);
+            std::string filename = resourceDir + entry->d_name;
             game->levelFileList.insert(filename);
         }
     }
     closedir(levelDir);
     for(int i=0; i<game->levelFileList.size(); ++i)
     {
-        debug("%s", game->levelFileList[i]);
+        debug("Loaded level %s", game->levelFileList[i].c_str());
     }
 
     loadCurrentLevel(game);
