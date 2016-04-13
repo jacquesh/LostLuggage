@@ -125,37 +125,38 @@ Level::Level(picojson::value v)
             if((obj == nullptr) || (obj->type != MapObjectType::CONVEYER))
                 continue;
             Conveyer* objConveyer = (Conveyer*)obj;
-
-            for (int di = -1; di<2; di+=2)
-            {
-                if ((i+di > 0) && (i+di < height))
-                {
-                    MapObject* nextObj = map[i+di][j];
-                    if((nextObj != nullptr) && (nextObj->type == MapObjectType::CONVEYER))
-                    {
-                        Conveyer* nextObjConveyer = (Conveyer*)nextObj;
-                        if (objConveyer->dir == nextObjConveyer->dir)
-                        {
-                            conveyerParent[i][j] = twodfind(conveyerParent,i+di,j,width);
-                        }
-                    }
-                }
-            }
-            for (int dj = -1; dj<2; dj+=2)
-            {
-                if ((j + dj > 0) && (j + dj < width))
-                {
-                    MapObject* nextObj = map[i][j+dj];
-                    if((nextObj != nullptr) && (nextObj->type == MapObjectType::CONVEYER))
-                    {
-                        Conveyer* nextObjConveyer = (Conveyer*)nextObj;
-                        if (objConveyer->dir == nextObjConveyer->dir)
-                        {
-                            conveyerParent[i][j] = twodfind(conveyerParent,i,j+dj,width);
-                        }
-                    }
-                }
-            }
+            if (objConveyer->dir == UP || objConveyer->dir == DOWN)
+              for (int di = -1; di<2; di+=2)
+              {
+                  if ((i+di > 0) && (i+di < height))
+                  {
+                      MapObject* nextObj = map[i+di][j];
+                      if((nextObj != nullptr) && (nextObj->type == MapObjectType::CONVEYER))
+                      {
+                          Conveyer* nextObjConveyer = (Conveyer*)nextObj;
+                          if (objConveyer->dir == nextObjConveyer->dir)
+                          {
+                              conveyerParent[i][j] = twodfind(conveyerParent,i+di,j,width);
+                          }
+                      }
+                  }
+              }
+            else
+              for (int dj = -1; dj<2; dj+=2)
+              {
+                  if ((j + dj > 0) && (j + dj < width))
+                  {
+                      MapObject* nextObj = map[i][j+dj];
+                      if((nextObj != nullptr) && (nextObj->type == MapObjectType::CONVEYER))
+                      {
+                          Conveyer* nextObjConveyer = (Conveyer*)nextObj;
+                          if (objConveyer->dir == nextObjConveyer->dir)
+                          {
+                              conveyerParent[i][j] = twodfind(conveyerParent,i,j+dj,width);
+                          }
+                      }
+                  }
+              }
         }
     }
     for (int i = 0; i<height; i++)
