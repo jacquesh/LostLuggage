@@ -12,22 +12,23 @@ namespace dge
     public:
         UnorderedList()
             : m_capacity(8), m_count(0), m_data(0)
-        // TODO: Do these get evaluated in-order? IE can we use capacity in the initializer for data?
         {
-            m_data = new T[m_capacity];
+            // Initialise all the new objects with empty parameters (should be supported)
+            m_data = new T[m_capacity]();
         }
 
         UnorderedList(int initialCapacity)
             : m_capacity(initialCapacity), m_count(0), m_data(0)
         {
-            m_data = new T[m_capacity];
+            // Initialise all the new objects with empty parameters (should be supported)
+            m_data = new T[m_capacity]();
         }
 
-        // TODO: What's the story about the accessibility of destructors? Does it matter at all? Can you even manually call a destructor?
         ~UnorderedList()
         {
             if(m_data != nullptr)
             {
+                // Automatically calls destructor on each object
                 delete[] m_data;
             }
         }
@@ -37,9 +38,13 @@ namespace dge
             if(m_count >= m_capacity)
             {
                 int newCapacity = m_capacity*2;
-                T* newData = new T[newCapacity];
-                memcpy(newData, m_data, m_count*sizeof(T));
-
+                T* newData = new T[newCapacity]();
+                // Can't use memcpy as some classes keep pointers that
+                // may be desroyed when the classes is destroyed as part
+                // of getting rid of m_data
+                for (int i = 0;i<m_count;++i)
+                  newData[i] = m_data[i];
+                // Clean up all the old data
                 delete[] m_data;
                 m_data = newData;
                 m_capacity = newCapacity;
