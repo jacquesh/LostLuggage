@@ -97,6 +97,8 @@ void loadCurrentLevel(GameState* game)
         game->bagList.insert(bag);
     }
     fin.close();
+
+    game->score = 0;
 }
 
 void initGame(GameState* game)
@@ -164,6 +166,7 @@ bool updateGame(GameState* game, float deltaTime)
             }
         }
     }
+    game->score += deltaTime * activeBagCount;
 
     if((activeBagCount+correctBagCount) < game->bagList.size())
     {

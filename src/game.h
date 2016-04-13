@@ -23,6 +23,7 @@ struct GameState
     dge::UnorderedList<Bag*> bagList;
 
     float timeTillLevelLoad;
+    float score;
 };
 
 #endif

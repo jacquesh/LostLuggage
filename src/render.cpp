@@ -130,6 +130,8 @@ void renderGame(GameState* game)
         dge::renderQuad(game->camera, position, size, 0.0f, red);
         dge::renderQuad(game->camera, position, size, 0.0f, categoryColours[bag.category]);
     }
+    std::string scoreString = "Score: "+std::to_string((int)game->score);
+    dge::renderString(game->camera,scoreString.c_str(),scoreString.size(),dge::Vector2(370,400),20,dge::Vector4(0.8,0.8,0.8,0.8));
 
 /*    ImVec2 windowLoc(50.0f, 50.0f);
     ImVec2 windowSize(200.0f, 200.f);
