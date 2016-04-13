@@ -269,6 +269,7 @@ float dge::slide(float from, float to, float maxDistance)
     {
         result = from + direction*maxDistance;
     }
+
     return result;
 }
 
