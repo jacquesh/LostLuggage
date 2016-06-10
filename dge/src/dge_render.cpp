@@ -52,7 +52,7 @@ GLuint dge::loadShader(const char* shaderFilename, GLenum shaderType)
     int64 bytesRead = SDL_RWread(shaderFile, shaderText, 1, shaderSize);
     if(bytesRead != shaderSize)
     {
-        debug("Expected to read %ld bytes from %s, instead got %ld", shaderSize, shaderFilename, bytesRead);
+        debug("Expected to read %lld bytes from %s, instead got %lld", shaderSize, shaderFilename, bytesRead);
         free(shaderText);
         SDL_RWclose(shaderFile);
         return 0;
@@ -443,8 +443,8 @@ void dge::renderQuad(CameraState camera, Vector2 centre, Vector2 size, float rot
     glUseProgram(flatColorShader);
     dge::updateShaderCameraState(camera, flatColorShader);
 
-    float cosTheta = cos(rotation);
-    float sinTheta = sin(rotation);
+    float cosTheta = cosf(rotation);
+    float sinTheta = sinf(rotation);
     float modelMatrix[16] = {cosTheta*size.x, sinTheta*size.y, 0, 0,
                              -sinTheta*size.x, cosTheta*size.y, 0, 0,
                              0, 0, 1, 0,
@@ -472,8 +472,8 @@ void dge::renderSprite(CameraState camera, GLuint textureID, Vector2 position, f
 
     dge::updateShaderCameraState(camera, spriteShader);
 
-    float cosTheta = cos(rotation);
-    float sinTheta = sin(rotation);
+    float cosTheta = cosf(rotation);
+    float sinTheta = sinf(rotation);
     float modelMatrix[16] = {cosTheta*size.x, sinTheta*size.y, 0, 0,
                              -sinTheta*size.x, cosTheta*size.y, 0, 0,
                              0, 0, 1, 0,

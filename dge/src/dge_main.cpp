@@ -22,7 +22,7 @@ void renderGame(GameState* game);
 void lateRender(GameState* game);
 void cleanupGame(GameState* game);
 
-int main(int argc, char* argv[])
+int main()
 {
     // TODO: Theres a (potential) difference between the version of SDL that we compiled with
     //       and the version we're running with (so maybe thats worth mentioning here)

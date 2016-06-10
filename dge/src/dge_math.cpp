@@ -15,7 +15,7 @@ float dge::Vector2::sqrMagnitude()
 
 float dge::Vector2::magnitude()
 {
-    return sqrt(sqrMagnitude());
+    return sqrtf(sqrMagnitude());
 }
 
 void dge::Vector2::normalize()
@@ -261,7 +261,7 @@ float dge::slide(float from, float to, float maxDistance)
     float direction = signf(offset);
 
     float result;
-    if(abs(offset) < maxDistance)
+    if(fabsf(offset) < maxDistance)
     {
         result = to;
     }
@@ -294,18 +294,18 @@ float dge::slideAngle(float from, float to, float maxDistance)
     float offset = to - from;
     float topEndWrapOffset = (to + TWOPI) - from;
     float bottomEndWrapOffset = (to - TWOPI) - from;
-    if(abs(offset) > abs(topEndWrapOffset))
+    if(fabsf(offset) > fabsf(topEndWrapOffset))
     {
         offset = topEndWrapOffset;
     }
-    else if(abs(offset) > abs(bottomEndWrapOffset))
+    else if(fabsf(offset) > fabsf(bottomEndWrapOffset))
     {
         offset = bottomEndWrapOffset;
     }
     float direction = signf(offset);
 
     float result;
-    if(abs(offset) < maxDistance)
+    if(fabsf(offset) < maxDistance)
     {
         result = to;
     }
