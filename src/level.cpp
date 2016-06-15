@@ -1,4 +1,5 @@
 #include "level.h"
+#include "dge_debug.h"
 #include <sstream>
 #include <picojson.h>
 #include <math.h>
@@ -76,17 +77,27 @@ Level::Level(picojson::value v)
     map = new MapObject** [height];
     conveyerParent = new int* [height];
 
+    std::string levelDescription[height];
+
     for (int i = height-1; i>=0; i--)
     {
-        std::stringstream sin(v.get("map").get<picojson::array>()[height-i-1].to_str());
+      std::stringstream sin(v.get("map").get<picojson::array>()[height-i-1].to_str());
+      for (int j = 0; j<width; j++)
+      {
+        char x; sin>>x;
+        levelDescription[i] += x;
+      }
+    }
+
+    for (int i = height-1; i>=0; i--)
+    {
         map[i] = new MapObject* [width];
         conveyerParent[i] = new int [width];
         for (int j = 0; j<width; j++)
         {
             map[i][j] = nullptr;
             conveyerParent[i][j] = i * width + j;
-            char v;
-            sin>>v;
+            char v = levelDescription[i][j];
             if((v >= 'A') && (v <= 'Z'))
             {
                 int binCategory = v - 'A';
@@ -121,37 +132,38 @@ Level::Level(picojson::value v)
             if((obj == nullptr) || (obj->type != MapObjectType::CONVEYER))
                 continue;
             Conveyer* objConveyer = (Conveyer*)obj;
-
-            for (int di = -1; di<2; di+=2)
-            {
-                if ((i+di > 0) && (i+di < height))
-                {
-                    MapObject* nextObj = map[i+di][j];
-                    if((nextObj != nullptr) && (nextObj->type == MapObjectType::CONVEYER))
-                    {
-                        Conveyer* nextObjConveyer = (Conveyer*)nextObj;
-                        if (objConveyer->dir == nextObjConveyer->dir)
-                        {
-                            conveyerParent[i][j] = twodfind(conveyerParent,i+di,j,width);
-                        }
-                    }
-                }
-            }
-            for (int dj = -1; dj<2; dj+=2)
-            {
-                if ((j + dj > 0) && (j + dj < width))
-                {
-                    MapObject* nextObj = map[i][j+dj];
-                    if((nextObj != nullptr) && (nextObj->type == MapObjectType::CONVEYER))
-                    {
-                        Conveyer* nextObjConveyer = (Conveyer*)nextObj;
-                        if (objConveyer->dir == nextObjConveyer->dir)
-                        {
-                            conveyerParent[i][j] = twodfind(conveyerParent,i,j+dj,width);
-                        }
-                    }
-                }
-            }
+            if (objConveyer->dir == UP || objConveyer->dir == DOWN)
+              for (int di = -1; di<2; di+=2)
+              {
+                  if ((i+di > 0) && (i+di < height))
+                  {
+                      MapObject* nextObj = map[i+di][j];
+                      if((nextObj != nullptr) && (nextObj->type == MapObjectType::CONVEYER))
+                      {
+                          Conveyer* nextObjConveyer = (Conveyer*)nextObj;
+                          if (objConveyer->dir == nextObjConveyer->dir)
+                          {
+                              conveyerParent[i][j] = twodfind(conveyerParent,i+di,j,width);
+                          }
+                      }
+                  }
+              }
+            else
+              for (int dj = -1; dj<2; dj+=2)
+              {
+                  if ((j + dj > 0) && (j + dj < width))
+                  {
+                      MapObject* nextObj = map[i][j+dj];
+                      if((nextObj != nullptr) && (nextObj->type == MapObjectType::CONVEYER))
+                      {
+                          Conveyer* nextObjConveyer = (Conveyer*)nextObj;
+                          if (objConveyer->dir == nextObjConveyer->dir)
+                          {
+                              conveyerParent[i][j] = twodfind(conveyerParent,i,j+dj,width);
+                          }
+                      }
+                  }
+              }
         }
     }
     for (int i = 0; i<height; i++)
@@ -172,6 +184,8 @@ Level::Level(picojson::value v)
             case 'l': dir = LEFT; break;
             default: dir = RIGHT; break;
         }
+        if (levelDescription[y-1][x-1] != '*')
+          debug("WARNING: Level description does not accurately reflect map at position <%d,%d> (should be a '*' character)",x,y);
         map[y-1][x-1] = new Wall(dir);
     }
 

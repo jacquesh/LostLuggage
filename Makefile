@@ -34,7 +34,7 @@ ifeq ($(OS),Windows_NT)
 else
 	COMMONFLAGS= -g --std=c++11
 	LINKCOMPILEFLAGS= -o $(BUILDDIR)/$(TARGET) -lGL -ldl `sdl2-config --libs`
-	COMPILEFLAGS= -c `sdl2-config --cflags` -Iinclude -Idge/src -Isrc -D_CRT_SECURE_NO_WARNINGS -Wall -o
+	COMPILEFLAGS= -c `sdl2-config --cflags` -Iinclude -Idge/src -Isrc -D_CRT_SECURE_NO_WARNINGS -Wall -Wconversion -o
 endif
 
 ifeq ($(OS),Windows_NT)

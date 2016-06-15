@@ -9,18 +9,21 @@
 #include "level.h"
 #include "bag.h"
 
+#include <string>
+
 extern float grid_size;
 
 struct GameState
 {
     dge::CameraState camera;
 
-    dge::UnorderedList<char*> levelFileList;
+    dge::UnorderedList<std::string> levelFileList;
     int currentLevelIndex;
     Level* currentLevel;
     dge::UnorderedList<Bag*> bagList;
 
     float timeTillLevelLoad;
+    float score;
 };
 
 #endif

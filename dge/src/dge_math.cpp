@@ -294,18 +294,30 @@ float dge::slideAngle(float from, float to, float maxDistance)
     float offset = to - from;
     float topEndWrapOffset = (to + TWOPI) - from;
     float bottomEndWrapOffset = (to - TWOPI) - from;
+<<<<<<< HEAD
     if(fabsf(offset) > fabsf(topEndWrapOffset))
     {
         offset = topEndWrapOffset;
     }
     else if(fabsf(offset) > fabsf(bottomEndWrapOffset))
+=======
+    if(fabs(offset) > fabs(topEndWrapOffset))
+    {
+        offset = topEndWrapOffset;
+    }
+    else if(fabs(offset) > fabs(bottomEndWrapOffset))
+>>>>>>> f4239d600a28c7ec0fb3f13d9ab609933d353f4b
     {
         offset = bottomEndWrapOffset;
     }
     float direction = signf(offset);
 
     float result;
+<<<<<<< HEAD
     if(fabsf(offset) < maxDistance)
+=======
+    if(fabs(offset) < maxDistance)
+>>>>>>> f4239d600a28c7ec0fb3f13d9ab609933d353f4b
     {
         result = to;
     }
